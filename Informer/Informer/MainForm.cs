@@ -1,0 +1,1637 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using OpenHardwareMonitor.Hardware;
+using System.IO;
+
+namespace Informer
+{
+    public partial class MainForm : Form
+    {
+        private Computer _pc;
+        private static Http _http = new Http();
+        private LogFile _log,_error;
+        private INIManager _manager;
+
+        private Form f2;
+
+
+
+        public MainForm()
+        {
+            InitializeComponent();
+            string fullPath = Application.StartupPath.ToString();
+            _manager = new INIManager(fullPath + "\\my.ini");
+            _manager.WritePrivateString("main", "version", "1.3.4");
+            Process psiwer;
+            psiwer = Process.Start("cmd", @"/c taskkill /f /im launcher_informer.exe");
+            psiwer.Close();
+            _pc = new Computer();
+            _pc.Open();
+            _pc.GPUEnabled = true;
+            _log = new LogFile("log");
+            _error = new LogFile("error");
+            
+
+            InitFromIni();
+            СheckForNewVersion();
+            f2 = new SettingsForm();
+            
+        }
+
+        private void BtStopClick(object sender, EventArgs e)
+        {
+            GetTempretureTimer.Enabled = false;
+            AutoStartTimer.Enabled = false;
+            btStop.Visible = false;
+            btStart.Enabled = true;
+            SendDataTimer.Enabled = false;
+            GPUTempMaxTimer.Enabled = false;
+            GPUTempMinTimer.Enabled = false;
+            ReloadMinerTimer.Enabled = false;
+            GPUFanMaxTimer.Enabled = false;
+            GPUFanMinTImer.Enabled = false;
+            GPUCoreMinTimer.Enabled = false;
+            GPUMemMinTimer.Enabled = false;
+            FellOffGPUTimer.Enabled = false;
+            InformationLabel.Text = "Остановлен";
+            InformationLabel.ForeColor = Color.Gray;
+            GlobalVars.timer_t_max = -100;
+            GlobalVars.timer_t_min = -100;
+            GlobalVars.timer_fan_max = -100;
+            GlobalVars.timer_fan_min = -100;
+            GlobalVars.timer_r_min = -100;
+            GlobalVars.timer_clock = -100;
+            GlobalVars.timer_memory = -100;
+            GlobalVars.timer_t_card = -100;
+            GlobalVars.timer_load_gpu = -100;
+            GlobalVars.timer_inet = -100;
+            _log.writeLogLine("Приложение остановлено","log");
+            EmailTextBox.ReadOnly = false;
+            SecretTextBox.ReadOnly = false;
+            RigTextBox.ReadOnly = false;
+
+        }
+        public void InitFromIni()
+        {
+           
+            string email          = _manager.GetPrivateString("main", "email");
+            string secret         = _manager.GetPrivateString("main", "secret");
+            string worker         = _manager.GetPrivateString("main", "worker");
+            string version        = _manager.GetPrivateString("main", "version");
+            string versionSettings = _manager.GetPrivateString("main", "versionSettings");
+
+            string reboot_temp_max     = _manager.GetPrivateString("main", "reboot_temp_max");
+            string temp_max = _manager.GetPrivateString("main", "temp_max");
+            string time_temp_max = _manager.GetPrivateString("main", "time_temp_max");
+
+            string reboot_temp_min = _manager.GetPrivateString("main", "reboot_temp_min");
+            string temp_min = _manager.GetPrivateString("main", "temp_min");
+            string time_temp_min = _manager.GetPrivateString("main", "time_temp_min");
+
+            string reboot_max_fan = _manager.GetPrivateString("main", "reboot_max_fan");
+            string fan_max = _manager.GetPrivateString("main", "fan_max");
+            string time_fan_max = _manager.GetPrivateString("main", "time_fan_max");
+
+            string reboot_min_fan = _manager.GetPrivateString("main", "reboot_min_fan");
+            string fan_min = _manager.GetPrivateString("main", "fan_min");
+            string time_fan_min = _manager.GetPrivateString("main", "time_fan_min");
+
+            string reload_file = _manager.GetPrivateString("main", "reload_file");
+            string reload_temp_min_file = _manager.GetPrivateString("main", "reload_temp_min_file");
+            string reload_time_min_file = _manager.GetPrivateString("main", "reload_time_min_file");
+            string dir = _manager.GetPrivateString("main", "dir");
+            string filename = _manager.GetPrivateString("main", "filename");
+            string path = _manager.GetPrivateString("main", "path");
+            string dir2 = _manager.GetPrivateString("main", "dir2");
+            string filename2 = _manager.GetPrivateString("main", "filename2");
+            string path2 = _manager.GetPrivateString("main", "path2");
+
+            string reboot_clock   = _manager.GetPrivateString("main", "reboot_clock");
+            string clock = _manager.GetPrivateString("main", "clock");
+            string time_clock = _manager.GetPrivateString("main", "time_clock");
+
+            string reboot_memory  = _manager.GetPrivateString("main", "reboot_memory");
+            string memory = _manager.GetPrivateString("main", "memory");
+            string time_memory = _manager.GetPrivateString("main", "time_memory");
+
+            string reboot_GPU = _manager.GetPrivateString("main", "reboot_GPU");
+            string count_GPU = _manager.GetPrivateString("main", "count_GPU");
+            string time_count_GPU = _manager.GetPrivateString("main", "time_count_GPU");
+
+            string reboot_load_GPU = _manager.GetPrivateString("main", "reboot_load_GPU");
+            string load_GPU = _manager.GetPrivateString("main", "load_GPU");
+            string time_load_GPU = _manager.GetPrivateString("main", "time_load_GPU");
+            
+            string reboot_internet = _manager.GetPrivateString("main", "reboot_internet");
+            string time_internet = _manager.GetPrivateString("main", "time_internet");
+
+            string time_start        = _manager.GetPrivateString("main", "time_start");
+
+            string stat = _manager.GetPrivateString("main", "stat");
+            string pool = _manager.GetPrivateString("main", "pool");
+            string wallet = _manager.GetPrivateString("main", "wallet");
+            //**
+//Установка версии настроек
+
+            if (string.IsNullOrEmpty(versionSettings))
+            {
+                versionSettings = "1";
+                _manager.WritePrivateString("main", "versionSettings", versionSettings);
+            }
+            GlobalVars.versionSettings = versionSettings;
+            //----------------------------****************----------------------------
+            //****Перезагрузка температура максимум - НАЧАЛО
+            //проверка секбокса
+            if (string.IsNullOrEmpty(reboot_temp_max))
+            {
+                reboot_temp_max = "0";
+                _manager.WritePrivateString("main", "reboot_temp_max", reboot_temp_max);
+            }
+            GlobalVars.reboot_temp_max = reboot_temp_max;
+
+            //температура максимум
+            if (string.IsNullOrEmpty(temp_max))
+            {
+                temp_max = "91";
+                _manager.WritePrivateString("main", "temp_max", temp_max);
+            }
+            GlobalVars.temp_max = Convert.ToInt32(temp_max);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_temp_max))
+            {
+                time_temp_max = "306";
+                _manager.WritePrivateString("main", "time_temp_max", time_temp_max);
+            }
+            GlobalVars.time_temp_max = Convert.ToInt32(time_temp_max);
+            //****Перезагрузка температура максимум - КОНЕЦ
+
+ //----------------------------****************----------------------------
+
+            //****Перезагрузка температура минимум - НАЧАЛО
+            if (string.IsNullOrEmpty(reboot_temp_min))
+            //проверка чекбокса
+            {
+                reboot_temp_min = "0";
+                _manager.WritePrivateString("main", "reboot_temp_min", reboot_temp_min);
+            }
+            GlobalVars.reboot_temp_min = reboot_temp_min;
+            //температура минимум
+            if (string.IsNullOrEmpty(temp_min))
+            {
+                temp_min = "41";
+                _manager.WritePrivateString("main", "temp_min", temp_min);
+            }
+            GlobalVars.temp_min = Convert.ToInt32(temp_min);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_temp_min))
+            {
+                time_temp_min = "305";
+                _manager.WritePrivateString("main", "time_temp_min", time_temp_min);
+            }
+            GlobalVars.time_temp_min = Convert.ToInt32(time_temp_min);
+            //****Перезагрузка температура минимум - КОНЕЦ
+
+//----------------------------****************----------------------------
+
+            //****Максимальные обороты НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reboot_max_fan))
+            {
+                reboot_max_fan = "0";
+                _manager.WritePrivateString("main", "reboot_max_fan", reboot_max_fan);
+            }
+            GlobalVars.reboot_max_fan = reboot_max_fan;
+            //обороты в %
+            if (string.IsNullOrEmpty(fan_max))
+            {
+                fan_max = "100";
+                _manager.WritePrivateString("main", "fan_max", fan_max);
+            }
+            GlobalVars.fan_max = Convert.ToInt32(fan_max);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_fan_max))
+            {
+                time_fan_max = "298";
+                _manager.WritePrivateString("main", "time_fan_max", time_fan_max);
+            }
+            GlobalVars.time_fan_max = Convert.ToInt32(time_fan_max);
+
+            //****Максимальные обороты - КОНЕЦ 
+
+//----------------------------****************----------------------------
+
+            //****Минимальные Обороты - НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reboot_min_fan))
+            {
+                reboot_min_fan = "0";
+                _manager.WritePrivateString("main", "reboot_min_fan", reboot_min_fan);
+            }
+            GlobalVars.reboot_min_fan = reboot_min_fan;
+
+            //обороты в %
+            if (string.IsNullOrEmpty(fan_min))
+            {
+                fan_min = "10";
+                _manager.WritePrivateString("main", "fan_min", fan_min);
+            }
+            GlobalVars.fan_min = Convert.ToInt32(fan_min);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_fan_min))
+            {
+                time_fan_min = "297";
+                _manager.WritePrivateString("main", "time_fan_min", time_fan_min);
+            }
+            GlobalVars.time_fan_min = Convert.ToInt32(time_fan_min);
+            //****Минимальные Обороты - КОНЕЦ
+
+//----------------------------****************----------------------------
+
+            //**Перезагрузка файла -- НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reload_file))
+            {
+                reload_file = "0";
+                _manager.WritePrivateString("main", "reload_file", reload_file);
+            }
+            GlobalVars.reload_file = reload_file;
+            //температура минимум
+            if (string.IsNullOrEmpty(reload_temp_min_file))
+            {
+                reload_temp_min_file = "40";
+                _manager.WritePrivateString("main", "reload_temp_min_file", reload_temp_min_file);
+            }
+            GlobalVars.reload_temp_min_file = Convert.ToInt32(reload_temp_min_file);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(reload_time_min_file))
+            {
+                reload_time_min_file = "303";
+                _manager.WritePrivateString("main", "reload_time_min_file", reload_time_min_file);
+            }
+            GlobalVars.reload_time_min_file = Convert.ToInt32(reload_time_min_file);
+
+            GlobalVars.dir = dir;
+            GlobalVars.filename = filename;
+            GlobalVars.pathreload = path;
+
+            GlobalVars.dir2 = dir2;
+            GlobalVars.filename2 = filename2;
+            GlobalVars.pathreload2 = path2;
+
+            //**Перезагрузка файла -- КОНЕЦ
+            //----------------------------****************----------------------------
+
+            //****Частота Ядра - НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reboot_clock))
+            {
+                reboot_clock = "0";
+                _manager.WritePrivateString("main", "reboot_clock", reboot_clock);
+            }
+            GlobalVars.reboot_clock = reboot_clock;
+            //частота ядра
+            if (string.IsNullOrEmpty(clock))
+            {
+                clock = "500";
+                _manager.WritePrivateString("main", "clock", clock);
+            }
+            GlobalVars.core_clock = Convert.ToInt32(clock);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_clock))
+            {
+                time_clock = "295";
+                _manager.WritePrivateString("main", "time_clock", time_clock);
+            }
+            GlobalVars.time_clock = Convert.ToInt32(time_clock);
+            //****Частота Ядра - КОНЕЦ
+
+//----------------------------****************----------------------------
+
+            //****Частоты памяти - НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reboot_memory))
+            {
+                reboot_memory = "0";
+                _manager.WritePrivateString("main", "reboot_memory", reboot_memory);
+            }
+            GlobalVars.reboot_memory = reboot_memory;
+            //частота
+            if (string.IsNullOrEmpty(memory))
+            {
+                memory = "499";
+                _manager.WritePrivateString("main", "memory", memory);
+            }
+            GlobalVars.memory = Convert.ToInt32(memory);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_memory))
+            {
+                time_memory = "301";
+                _manager.WritePrivateString("main", "time_memory", time_memory);
+            }
+            GlobalVars.time_memory = Convert.ToInt32(time_memory);
+            //****Частоты памяти - КОНЕЦ
+
+ //----------------------------****************----------------------------
+
+
+            //****Отвалом Карты - НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reboot_GPU)) {
+                reboot_GPU = "0";
+                _manager.WritePrivateString("main", "reboot_card", reboot_GPU);
+            }
+            GlobalVars.reboot_GPU = reboot_GPU;
+                //колличество карт
+            if (string.IsNullOrEmpty(count_GPU)) {
+                count_GPU = "1";
+                _manager.WritePrivateString("main", "count_GPU", count_GPU);
+            }
+            GlobalVars.count_GPU = Convert.ToInt32(count_GPU);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_count_GPU)) {
+                time_count_GPU = "300";
+                _manager.WritePrivateString("main", "time_count_GPU", time_count_GPU);
+            }
+            GlobalVars.time_count_GPU = Convert.ToInt32(time_count_GPU);
+            //****Отвалом Карты - КОНЕЦ
+
+            //----------------------------****************----------------------------
+
+            //****Загрузка GPU - НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reboot_load_GPU))
+            {
+                reboot_load_GPU = "0";
+                _manager.WritePrivateString("main", "reboot_load_GPU", reboot_load_GPU);
+            }
+            GlobalVars.reboot_load_GPU = reboot_load_GPU;
+            //загрузка GPU в процентах
+            if (string.IsNullOrEmpty(load_GPU))
+            {
+                load_GPU = "80";
+                _manager.WritePrivateString("main", "load_GPU", load_GPU);
+            }
+            GlobalVars.load_GPU = Convert.ToInt32(load_GPU);
+            //время перезагрузки
+            if (string.IsNullOrEmpty(time_load_GPU))
+            {
+                time_load_GPU = "180";
+                _manager.WritePrivateString("main", "time_load_GPU", time_load_GPU);
+            }
+            GlobalVars.time_load_GPU = Convert.ToInt32(time_load_GPU);
+
+
+            //****Загрузка GPU - КОНЕЦ
+
+            //----------------------------****************----------------------------
+
+            //****НЕТУ ИНТЕРНЕТА - НАЧАЛО
+            //проверка чекбокса
+            if (string.IsNullOrEmpty(reboot_internet)) {
+                reboot_internet = "0";
+                _manager.WritePrivateString("main", "reboot_internet", reboot_internet);
+            }
+            GlobalVars.reboot_internet = reboot_internet;//yt nen dsasds ignore line)
+                // время перезагрузки
+            if (string.IsNullOrEmpty(time_internet)) {
+                time_internet = "299";
+                _manager.WritePrivateString("main", "time_internet", time_internet);
+            }
+            GlobalVars.time_internet = Convert.ToInt32(time_internet);
+            //****НЕТУ ИНТЕРНЕТА КОНЕЦ
+
+
+//----------------------------****************----------------------------
+
+            //****Запуска программы через - НАЧАЛО
+            if (string.IsNullOrEmpty(time_start))
+            {
+                time_start = "60";
+                _manager.WritePrivateString("main", "time_start", time_start);
+            }
+            GlobalVars.time_start = Convert.ToInt32(time_start);
+
+            //****Запуска программы через - КОНЕЦ
+
+//----------------------------****************----------------------------
+
+            bool start;
+            GlobalVars.email = email;
+            GlobalVars.worker = worker;
+            GlobalVars.secret = secret;
+            GlobalVars.versions = version;
+
+//пока неиспользуется            
+            GlobalVars.stat = stat;
+            GlobalVars.pool = pool;
+            GlobalVars.wallet = wallet;
+//**
+
+            if (string.IsNullOrEmpty(email))
+            {
+                start = false;
+            } else if (string.IsNullOrEmpty(secret))
+            {
+                start = false;
+            } else if (string.IsNullOrEmpty(worker))
+            {
+                start = false;
+            }
+            else
+            {
+                start = true;
+                EmailTextBox.Text = email;
+                SecretTextBox.Text = secret;
+                RigTextBox.Text = worker;
+            }
+            if (start)
+            {
+                timer2.Interval = GlobalVars.time_start * 1000;
+                timer2.Enabled = true;
+                AutoStartTimer.Enabled = true;
+                TimeWorkTimer.Enabled = true;
+            }
+        }
+
+        private void GetTempretureTimerTick(object sender, EventArgs e)
+        {
+            try
+            {
+                btStart.Enabled = false;
+                timer2.Enabled = false;
+                AutoStartTimer.Enabled = false;
+                btStop.Visible = true;
+                gpu_temp();
+
+            }
+            catch (Exception ex)
+            {
+               _error.writeLogLine(ex.Message + "timer GetTempretureTimerTick", "error");
+            }
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            GetTempretureTimer.Enabled = true;
+            SendDataTimer.Enabled = true;
+            SendData();
+            AutoStartTimer.Enabled = false;
+            btStop.Visible = true;
+            btStart.Enabled = false;
+            GlobalVars.timeOnline = 0;
+        }
+
+        private void AutoStart_Tick(object sender, EventArgs e)
+        {
+            GlobalVars.time_start = GlobalVars.time_start - 1;
+            btStart.Text = "Запустить(" + GlobalVars.time_start.ToString() + ")";
+        }
+
+        public void gpu_temp()
+        {
+            try
+            {
+
+                GlobalVars.card = "";
+                GlobalVars.temp = "";
+                GlobalVars.fan = "";
+                GlobalVars.load = "";
+                GlobalVars.clock = "";
+                GlobalVars.mem = "";
+                GlobalVars.counts = 0;
+                int r_count = 0;
+                int c_count = 0;
+                int m_count = 0;
+                int max_count = 0;
+                int min_count = 0;
+                int fan_max_count = 0;
+                int fan_min_count = 0;
+                int load_count = 0;
+
+                int temp1 = 0;
+                int fan1 = 0;
+                int fanmin = 200;
+                int tempmin = 200;
+                int tempmax = -10;
+                int fanmax = -10;
+                int clockmin = 99999;
+                int memorymin = 99999;
+                int loadmin = 200;
+                int clockk1;
+                int mem1;
+                int load1;
+                foreach (var hard in _pc.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
+                {
+                    hard.Update();
+                    if (hard.HardwareType == HardwareType.GpuAti || hard.HardwareType == HardwareType.GpuNvidia)//КАРТЫ
+                    {
+
+                        GlobalVars.counts = GlobalVars.counts + 1;
+                        GlobalVars.card += hard.Name + ",";
+
+                        foreach (var sensor in hard.Sensors)//ИДЕМ по сенсорам
+                        {
+
+                            if (sensor.SensorType == SensorType.Clock)
+                            {//ЧАСТОТЫ
+                                if (sensor.Name == "GPU Core")//ЯДРО
+                                {
+
+                                    GlobalVars.clock += sensor.Value.GetValueOrDefault() + ";";
+                                    clockk1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                    if (clockmin > clockk1)
+                                    {
+                                        clockmin = clockk1;
+                                    }
+
+
+                                }
+                                if (hard.HardwareType == HardwareType.GpuAti)
+                                {
+                                    if (sensor.Name == "GPU Memory")//ПАМЯТЬ
+                                    {
+                                        GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
+                                        mem1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                        if (memorymin > mem1)
+                                        {
+                                            memorymin = mem1;
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (sensor.Name == "GPU Memory")//ПАМЯТЬ
+                                    {
+                                        GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
+                                        mem1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                        if (memorymin > mem1)
+                                        {
+                                            memorymin = mem1;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (sensor.SensorType == SensorType.Temperature)//Температура
+                            {
+                                GlobalVars.temp += sensor.Value.GetValueOrDefault() + ",";
+                                temp1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                if (tempmin > temp1)
+                                {
+                                    tempmin = temp1;
+                                }
+                                if (tempmax < temp1)
+                                {
+                                    tempmax = temp1;
+                                }
+                            }
+                            else if (sensor.SensorType == SensorType.Control)// FAN
+                            {
+
+                                GlobalVars.fan += sensor.Value.GetValueOrDefault() + ",";
+                                fan1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                if (fanmin > fan1)
+                                {
+                                    fanmin = fan1;
+                                }
+                                if (fanmax < fan1)
+                                {
+                                    fanmax = fan1;
+                                }
+
+                            }
+                            else if (sensor.SensorType == SensorType.Load)//LOAD
+                            {
+                                if (sensor.Name == "GPU Core")
+                                {
+                                    GlobalVars.load += sensor.Value.GetValueOrDefault() + ",";
+                                    load1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                    if (loadmin > load1)
+                                    {
+                                        loadmin = load1;
+                                    }
+                                }
+                            }
+
+                            if (GlobalVars.reboot_load_GPU == "1")
+                            {
+                                if (loadmin <= GlobalVars.load_GPU)
+                                {
+                                    load_count = 1;
+                                }
+                                else
+                                {
+                                    load_count = 0;
+                                }
+
+                            }
+
+                            if (GlobalVars.reboot_temp_max == "1")
+                            {
+                                if (tempmax >= GlobalVars.temp_max)
+                                {
+
+                                    max_count = 1;
+                                }
+                                else
+                                {
+                                    max_count = 0;
+                                }
+
+                            }
+                            if (GlobalVars.reboot_temp_min == "1")
+                            {
+                                if (tempmin <= GlobalVars.temp_min)
+                                {
+                                    min_count = 1;
+
+                                }
+                                else
+                                {
+                                    min_count = 0;
+
+                                }
+                            }
+                            if (GlobalVars.reboot_max_fan == "1")
+                            {
+                                if (fanmax >= GlobalVars.fan_max)
+                                {
+
+                                    fan_max_count = 1;
+
+                                }
+                                else
+                                {
+                                    fan_max_count = 0;
+
+                                }
+                            }
+                            if (GlobalVars.reboot_min_fan == "1")
+                            {
+                                if (fanmin <= GlobalVars.fan_min)
+                                {
+
+                                    fan_min_count = 1;
+
+                                }
+                                else
+                                {
+                                    fan_min_count = 0;
+
+                                }
+
+
+                            }
+                            if (GlobalVars.reload_file == "1")
+                            {
+                                if (tempmin <= GlobalVars.reload_temp_min_file)
+                                {
+                                    r_count = 1;
+                                }
+                                else
+                                {
+                                    r_count = 0;
+                                }
+
+
+                            }
+                            if (GlobalVars.reboot_clock == "1")
+                            {
+                                if (clockmin < GlobalVars.core_clock)
+                                {
+                                    c_count = 1;
+                                }
+                                else
+                                {
+                                    c_count = 0;
+                                }
+
+
+                            }
+                            if (GlobalVars.reboot_memory == "1")
+                            {
+                                if (memorymin < GlobalVars.memory)
+                                {
+                                   m_count = 1;
+                                }
+                                else
+                                {
+                                    m_count = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //ПРОВЕРКА
+
+                if (GlobalVars.reboot_temp_max == "1")
+                {
+                    if (max_count > 0)
+                    {
+
+                        GPUTempMaxTimer.Enabled = true;
+                        labelStatusTempMax.Text = "Перегрев!";
+                        labelStatusTempMax.ForeColor = Color.Red;
+                        labelCounterTempMax.Text = GlobalVars.timer_t_max.ToString();
+                        labelCounterTempMax.ForeColor = Color.Red;
+
+                    }
+                    else
+                    {
+                        GPUTempMaxTimer.Enabled = false;
+                        GlobalVars.timer_t_max = -100;
+
+                        labelStatusTempMax.Text = "OK";
+                        labelStatusTempMax.ForeColor = Color.Green;
+                        labelCounterTempMax.Text = "";
+
+                    }
+                }
+                else
+                {
+                    labelStatusTempMax.Text = "Не отслеживается";
+                    labelStatusTempMax.ForeColor = Color.Blue;
+                    labelCounterTempMax.Text = "";
+                }
+
+                if (GlobalVars.reboot_temp_min == "1")
+                {
+                    if (min_count > 0)//min temp
+                    {
+
+                        labelStatusTempMin.Text = "Холодный!";
+                        labelStatusTempMin.ForeColor = Color.Red;
+                        labelCounterTempMin.Text = GlobalVars.timer_t_min.ToString();
+                        labelCounterTempMin.ForeColor = Color.Red;
+                        GPUTempMinTimer.Enabled = true;
+
+                    }
+                    else
+                    {
+                        GPUTempMinTimer.Enabled = false;
+                        GlobalVars.timer_t_min = -100;
+                        labelStatusTempMin.Text = "OK";
+                        labelStatusTempMin.ForeColor = Color.Green;
+                        labelCounterTempMin.Text = "";
+
+                    }
+                }
+                else
+                {
+                    labelStatusTempMin.Text = "Не отслеживается";
+                    labelStatusTempMin.ForeColor = Color.Blue;
+                    labelCounterTempMin.Text = "";
+                }
+
+                if (GlobalVars.reboot_load_GPU == "1")
+                {
+                    if (load_count > 0)
+                    {
+                        labelStatusLoadGPU.Text = "Маленькая нагрузка";
+                        labelStatusLoadGPU.ForeColor = Color.Red;
+                        labelCounterLoadGPU.Text = GlobalVars.timer_load_gpu.ToString();
+                        labelCounterLoadGPU.ForeColor = Color.Red;
+                        GPULoadMin.Enabled = true;
+                    }
+                    else
+                    {
+                        GPULoadMin.Enabled = true;
+                        GlobalVars.timer_load_gpu = -100;
+                        labelStatusLoadGPU.Text = "OK";
+                        labelStatusLoadGPU.ForeColor = Color.Green;
+                        labelCounterLoadGPU.Text = "";
+                    }
+
+                }
+                else
+                {
+                    labelStatusLoadGPU.Text = "Не отслеживается";
+                    labelStatusLoadGPU.ForeColor = Color.Blue;
+                    labelCounterLoadGPU.Text = "";
+                }
+
+                if (GlobalVars.reload_file == "1")
+                {
+                    if (r_count > 0)
+                    {
+                        ReloadMinerTimer.Enabled = true;
+                      
+                        labelStatusReloadFile.Text = "Холодный!";
+                        labelStatusReloadFile.ForeColor = Color.Red;
+                        labelCounterReloadFile.Text = GlobalVars.timer_r_min.ToString();
+                        labelCounterReloadFile.ForeColor = Color.Red;
+
+                    }
+                    else
+                    {
+                        ReloadMinerTimer.Enabled = false;
+                        GlobalVars.timer_r_min = -100;
+                        labelStatusReloadFile.Text = "ОК";
+                        labelStatusReloadFile.ForeColor= Color.Green;
+                        labelCounterReloadFile.Text = "";
+                    }
+
+                }
+                else
+                {
+                    labelStatusReloadFile.Text = "Не отслеживается";
+                    labelStatusReloadFile.ForeColor = Color.Blue;
+                    labelCounterReloadFile.Text = "";
+                }
+
+                if (GlobalVars.reboot_max_fan == "1")
+                {
+                    if (fan_max_count > 0)
+                    {
+                        GPUFanMaxTimer.Enabled = true;
+                        labelStatusFanMax.Text = "Высокие обороты!";
+                        labelStatusFanMax.ForeColor = Color.Red;
+                        labelCounterFanMax.Text = GlobalVars.timer_fan_max.ToString();
+                        labelCounterFanMax.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        GPUFanMaxTimer.Enabled = false;
+                        GlobalVars.timer_fan_max = -100;
+                        labelStatusFanMax.Text = "ОК";
+                        labelStatusFanMax.ForeColor = Color.Green;
+                        labelCounterFanMax.Text = "";
+                    }
+
+                }
+                else
+                {
+                    labelStatusFanMax.Text = "Не отслеживается";
+                    labelStatusFanMax.ForeColor = Color.Blue;
+                    labelCounterFanMax.Text = "";
+                }
+
+                if (GlobalVars.reboot_min_fan == "1")
+                {
+                    if (fan_min_count > 0)
+                    {
+                        GPUFanMinTImer.Enabled = true;
+                        labelStatusFanMin.Text = "Низкие обороты!";
+                        labelStatusFanMin.ForeColor = Color.Red;
+                        labelCounterFanMin.Text = GlobalVars.timer_fan_min.ToString();
+                        labelCounterFanMin.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        GPUFanMinTImer.Enabled = false;
+                        GlobalVars.timer_fan_min = -100;
+                        labelStatusFanMin.Text = "ОК";
+                        labelStatusFanMin.ForeColor = Color.Green;
+                        labelCounterFanMin.Text = "";
+                    }
+                }
+                else
+                {
+
+                    labelStatusFanMin.Text = "Не отслеживается";
+                    labelStatusFanMin.ForeColor = Color.Blue;
+                    labelCounterFanMin.Text = "";
+                }
+                //clock
+                if (GlobalVars.reboot_clock == "1")
+                {
+                    if (c_count > 0)
+                    {
+                        GPUCoreMinTimer.Enabled = true;
+                        labelStatusClock.Text = "Низкие частоты ядра!";
+                        labelStatusClock.ForeColor = Color.Red;
+                        labelCounterClock.Text = GlobalVars.timer_clock.ToString();
+                        labelCounterClock.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        GPUCoreMinTimer.Enabled = false;
+                        GlobalVars.timer_clock = -100;
+                        labelStatusClock.Text = "ОК";
+                        labelStatusClock.ForeColor = Color.Green;
+                        labelCounterClock.Text = "";
+                    }
+                }
+                else
+                {
+                    labelStatusClock.Text = "Не отслеживается";
+                    labelStatusClock.ForeColor = Color.Blue;
+                    labelCounterClock.Text = "";
+                }
+                if (GlobalVars.reboot_memory == "1")
+                {
+                    if (m_count > 0)
+                    {
+                        GPUMemMinTimer.Enabled = true;
+                        labelStatusMemory.Text = "Низкие частоты памяти!";
+                        labelStatusMemory.ForeColor = Color.Red;
+                        labelCounterMemory.Text = GlobalVars.timer_memory.ToString();
+                        labelCounterMemory.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        GPUMemMinTimer.Enabled = false;
+                        GlobalVars.timer_memory = -100;
+                        labelStatusMemory.Text = "ОК";
+                        labelStatusMemory.ForeColor = Color.Green;
+                        labelCounterMemory.Text = "";
+                    }
+                }
+                else
+                {
+                    labelStatusMemory.Text = "Не отслеживается";
+                    labelStatusMemory.ForeColor = Color.Blue;
+                    labelCounterMemory.Text = "";
+                }
+
+                if (GlobalVars.reboot_GPU == "1")
+                {
+                    if (GlobalVars.counts != GlobalVars.count_GPU)
+                    {
+                        FellOffGPUTimer.Enabled = true;
+                        labelStatusFellOffGPU.Text = "Не все карты!";
+                        labelStatusFellOffGPU.ForeColor = Color.Red;
+                        labelCounerFellOff.Text = GlobalVars.timer_t_card.ToString();
+                        labelCounerFellOff.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        FellOffGPUTimer.Enabled = false;
+                        GlobalVars.timer_t_card = -100;
+                        labelStatusFellOffGPU.Text = "OK";
+                        labelStatusFellOffGPU.ForeColor = Color.Green;
+                        labelCounerFellOff.Text = "";
+                    }
+                }
+                else
+                {
+                    labelStatusFellOffGPU.Text = "Не отслеживается";
+                    labelStatusFellOffGPU.ForeColor = Color.Blue;
+                    labelCounerFellOff.Text = "";
+                }
+
+
+
+
+                if (GlobalVars.reboot_internet == "1")
+                {
+                    if (!GlobalVars.InternetIsActive)
+                    {
+                        DontHaveInternetTimer.Enabled = true;
+                        labelStatusInternet.Text = "Нет доступа перезагрузка";
+                        label3CounterInternet.Text = GlobalVars.timer_inet.ToString();
+                    }
+                    else
+                    {
+                        DontHaveInternetTimer.Enabled = false;
+                        labelStatusInternet.Text = "OK";
+                        labelStatusInternet.ForeColor = Color.Green;
+                        label3CounterInternet.Text = "";
+                    }
+
+
+                }
+                else
+                {
+                    labelStatusInternet.Text = "Не отслеживается";
+                    labelStatusInternet.ForeColor = Color.Blue;
+                    label3CounterInternet.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                _error.writeLogLine(ex.Message + "get parameters sensors", "error");
+            }
+        }
+        public void SendData()
+        {
+            try
+            {
+                string json = _http.GetContent(GlobalVars.host + 
+                    "/api.php?email=" + GlobalVars.email +
+                    "&secret=" + GlobalVars.secret +
+                    "&worker=" + GlobalVars.worker + 
+                    "&gpu=" + GlobalVars.card + 
+                    "&temp=" + GlobalVars.temp + 
+                    "&fan=" + GlobalVars.fan + 
+                    "&timer=" + GlobalVars.timeOnline.ToString() + 
+                    "&v=" + GlobalVars.versions + 
+                    "&load=" + GlobalVars.load +
+                    "&clock=" + GlobalVars.clock +
+                    "&mem=" + GlobalVars.mem +
+                    "&versionSettings=" + GlobalVars.versionSettings);
+
+                if (!string.IsNullOrWhiteSpace(json))
+                {
+                    var response = JsonConvert.DeserializeObject<ApiResponse>(json);
+                    SendDataTimer.Interval = response.settings.interval * 1000;
+                }
+            }
+            catch (Exception ex)
+            {
+                _error.writeLogLine(ex.Message + "function send() Отправка на сайт", "error");
+            }            
+        }
+        public void Reboot(string msg, string bat)
+        {
+            try
+            {
+                GetTempretureTimer.Enabled = false;
+                timer2.Enabled = false;
+                _http.GetContent(GlobalVars.host + 
+                    "/api.php?email=" + GlobalVars.email +
+                    "&secret=" + GlobalVars.secret +
+                    "&worker=" + GlobalVars.worker + 
+                    "&gpu=" + GlobalVars.card + 
+                    "&temp=" + GlobalVars.temp + 
+                    "&fan=" + GlobalVars.fan + 
+                    "&status=reboot" + 
+                    "&msg=" + msg);
+
+                Process.Start(bat);
+            }
+            catch (Exception ex)
+            {
+               _error.writeLogLine(ex.Message, "error");
+            }
+        }
+
+
+        public void СheckForNewVersion()
+        {
+            try
+            {
+                string v = _manager.GetPrivateString("main", "version");
+                string pack = _http.GetContent(GlobalVars.host + "/api/?method=version");
+                VersionResponse m = JsonConvert.DeserializeObject<VersionResponse>(pack);
+                string ver = m.version;
+                GlobalVars.link = m.link;
+                if (v == ver)
+                {
+                    linkLabel1.Visible = false;
+                }
+                else
+                {
+                    linkLabel1.Visible = true;
+                    linkLabel1.Text = "Обновите клиент до версии v" + ver;
+                    try
+                    {
+                        Process.Start("launcher_informer.exe");
+                    }
+                    catch (Exception ex)
+                    {
+                        _error.writeLogLine(ex.Message, "error");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _error.writeLogLine(ex.Message, "error");
+            }
+        }
+
+        private void CheckNewVersionTimerTick(object sender, EventArgs e)
+        {
+            СheckForNewVersion();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string l = GlobalVars.link;
+            System.Diagnostics.Process.Start(l);
+        }
+
+        private void UptimeTimerTick(object sender, EventArgs e)
+        {
+            GlobalVars.timeOnline = GlobalVars.timeOnline + 1;
+            int min = GlobalVars.timeOnline;
+            int d = min / 1440;
+            min = min - (d * 1440);
+            int h = min / 60;
+            min = min - (h * 60);
+            labelTimeWork2.Text = ("Дни: " +d.ToString()+ " Часы: " +h.ToString()+ " Минуты: " +min.ToString());
+        }
+        public void Reload(string msg)
+        {
+            try
+            {
+                ReloadMinerTimer.Enabled         = false;
+                GlobalVars.timer_r_min = -100;
+                var ppsi               = Process.Start("cmd", @"/c taskkill /f /im " + GlobalVars.filename);
+                ppsi.Close();
+                System.Threading.Thread.Sleep(1000);
+
+                ReloadMinerTimer.Enabled         = false;
+                GlobalVars.timer_r_min = -100;
+                var psiw               = Process.Start("cmd", @"/c taskkill /f /im conhost.exe");
+                psiw.Close();
+                System.Threading.Thread.Sleep(1000);
+
+                ReloadMinerTimer.Enabled         = false;
+                GlobalVars.timer_r_min = -100;
+                var psi                = Process.Start("cmd", @"/c taskkill /f /im cmd.exe");
+                psi.Close();
+                System.Threading.Thread.Sleep(1000);
+
+                ReloadMinerTimer.Enabled = false;
+                GlobalVars.timer_r_min = -100;
+                System.Threading.Thread.Sleep(1000);
+                Process.Start("nice.bat");
+                ReloadMinerTimer.Enabled = false;
+                GlobalVars.timer_r_min = -100;
+                System.Threading.Thread.Sleep(1500);
+                ProcessStartInfo rpsi;
+                rpsi = new ProcessStartInfo
+                {
+                    WorkingDirectory = GlobalVars.dir2,
+                    FileName = GlobalVars.pathreload2
+                };
+                System.Threading.Thread.Sleep(1000);
+
+                Process.Start(rpsi);/**/
+
+                string pack = _http.GetContent(GlobalVars.host + 
+                    "/api.php?email=" + GlobalVars.email +
+                    "&secret=" + GlobalVars.secret +
+                    "&worker=" + GlobalVars.worker + 
+                    "&gpu=" + GlobalVars.card + 
+                    "&temp=" + GlobalVars.temp + 
+                    "&fan=" + GlobalVars.fan + 
+                    "&status=reload" + 
+                    "&msg=" + msg);
+                ReloadMinerTimer.Enabled = false;
+                GlobalVars.timer_r_min = -100;
+            }
+            catch (Exception ex)
+            {
+                _error.writeLogLine(ex.Message, "error");
+            }
+            }
+        public void GetPoolInfo(string pool)
+        {
+
+            if (pool == "nanozec")
+            {
+                string pack = _http.GetContent("https://api.nanopool.org/v1/zec/workers/" + GlobalVars.wallet);//свой кошель
+                PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
+                foreach (var item in m.data)
+                {
+                    if (item.id == GlobalVars.worker)
+                    {
+                        labelStatusTempMax.Text = item.hashrate.ToString();
+                    }
+                }
+
+            }
+            else if (pool == "nanoetc")
+            {
+                string pack = _http.GetContent("https://api.nanopool.org/v1/etc/workers/" + GlobalVars.wallet);//свой кошель
+                PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
+                foreach (var item in m.data)
+                {
+                    if (item.id == GlobalVars.worker)
+                    {
+                        labelStatusTempMax.Text = item.hashrate.ToString();
+                    }
+                }
+            }
+            else if (pool == "nanoeth")
+            {
+                string pack = _http.GetContent("https://api.nanopool.org/v1/eth/workers/" + GlobalVars.wallet);//свой кошель
+                PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
+                foreach (var item in m.data)
+                {
+                    if (item.id == GlobalVars.worker)
+                    {
+                        labelStatusTempMax.Text = item.hashrate.ToString();
+                        // MessageBox.Show(item.hashrate.ToString());
+                    }
+                }
+            }
+            else if (pool == "nanosia")
+            {
+                string pack = _http.GetContent("https://api.nanopool.org/v1/sia/workers/" + GlobalVars.wallet);//свой кошель
+                PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
+                foreach (var item in m.data)
+                {
+                    if (item.id == GlobalVars.worker)
+                    {
+                        labelStatusTempMax.Text = item.hashrate.ToString();
+                        // MessageBox.Show(item.hashrate.ToString());
+                    }
+                }
+            }
+            else if (pool == "nanoxmr")
+            {
+                string pack = _http.GetContent("https://api.nanopool.org/v1/xmr/workers/" + GlobalVars.wallet);//свой кошель
+                PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
+                foreach (var item in m.data)
+                {
+                    if (item.id == GlobalVars.worker)
+                    {
+                        labelStatusTempMax.Text = item.hashrate.ToString();
+                        // MessageBox.Show(item.hashrate.ToString());
+                    }
+                }
+            }
+            else if (pool == "nanopasc")
+            {
+                string pack = _http.GetContent("https://api.nanopool.org/v1/pasc/workers/" + GlobalVars.wallet);//свой кошель
+                PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
+                foreach (var item in m.data)
+                {
+                    if (item.id == GlobalVars.worker)
+                    {
+                        labelStatusTempMax.Text = item.hashrate.ToString();
+                        // MessageBox.Show(item.hashrate.ToString());
+                    }
+                }
+            }
+            else if (pool == "nicehash")
+            {
+                string pack = _http.GetContent("https://api.nicehash.com/api?method=stats.provider.ex&addr=" + GlobalVars.wallet);//свой кошель
+                PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
+            }
+        }
+
+        private void BtStartClick(object sender, EventArgs e)
+        {
+
+            string email       = EmailTextBox.Text;
+            string secret      = SecretTextBox.Text;
+            string worker1     = RigTextBox.Text;
+
+            if (string.IsNullOrEmpty(email))
+            {
+                MessageBox.Show("Введите EMAIL!");
+            }
+            else if (string.IsNullOrEmpty(secret))
+            {
+                MessageBox.Show("Введите SECRET KEY!");
+            }
+            else if (string.IsNullOrEmpty(worker1))
+            {
+                MessageBox.Show("Задайте имя ригу!");
+            }
+            else
+            {
+                _manager.WritePrivateString("main", "email", email);
+                _manager.WritePrivateString("main", "worker", worker1);
+                _manager.WritePrivateString("main", "secret", secret);
+                GetTempretureTimer.Enabled = true;
+
+                SendDataTimer.Enabled = true;
+                btStart.Enabled = false;
+                btStop.Visible = true;
+                AutoStartTimer.Enabled  = false;
+
+                string email1  = _manager.GetPrivateString("main", "email");
+                string worker  = _manager.GetPrivateString("main", "worker");
+                string secret1 = _manager.GetPrivateString("main", "secret");
+                
+                //версия настроек + 1
+                string versionSettings1 = _manager.GetPrivateString("main", "versionSettings");
+                int versionSettings2 = 0;
+                versionSettings2 = versionSettings2+Convert.ToInt32(versionSettings1);
+                versionSettings2++;
+                _manager.WritePrivateString("main", "versionSettings", Convert.ToString(versionSettings2));
+                GlobalVars.versionSettings = Convert.ToString(versionSettings2);
+
+
+                GlobalVars.email  = email1;
+                GlobalVars.worker = worker;
+                GlobalVars.secret = secret1;
+
+                gpu_temp();
+
+               
+                _log.writeLogLine("Приложение в работе", "log");
+
+                SendData();
+                GlobalVars.timeOnline = 0;
+                InformationLabel.Text = "Запущен";
+                InformationLabel.ForeColor = Color.Green;
+                EmailTextBox.ReadOnly = true;
+                SecretTextBox.ReadOnly = true;
+                RigTextBox.ReadOnly = true;
+
+            }
+            InitFromIni();
+        }
+
+        private void BtnOpenSettingsFormClick(object sender, EventArgs e)
+        {
+            
+            f2.ShowDialog();
+
+        }
+
+        private void TempretureTimerTick(object sender, EventArgs e)
+        {
+            string msg = "Температура выше максимальной, перезагрузка!";
+            string bat = "reboot_t_max.bat";
+            if (GlobalVars.timer_t_max < 0) {
+                GlobalVars.timer_t_max = GlobalVars.time_temp_max;
+            }
+
+            if (GlobalVars.timer_t_max == 0)
+            {
+                if (!GlobalVars.reboot1)
+                {
+                    Reboot(msg, bat);
+                    GlobalVars.reboot1 = true;
+                }
+            }
+            GlobalVars.timer_t_max = GlobalVars.timer_t_max - 1;
+        }
+
+        private void LowTempretureTimerTick(object sender, EventArgs e)
+        {
+            string msg = "Температура ниже минимальной, перезагрузка!";
+            string bat = "reboot_t_min.bat";
+            if (GlobalVars.timer_t_min < 0)
+                {
+                    GlobalVars.timer_t_min = GlobalVars.time_temp_min;
+                }
+                if (GlobalVars.timer_t_min == 0)
+                {
+                if (!GlobalVars.reboot2)
+                {
+                    if (GlobalVars.InternetIsActive)
+                    {
+                        Reboot(msg, bat);
+                        GlobalVars.reboot2 = true;
+                    }
+                    else
+                    {
+                        GlobalVars.timer_t_min = -100;
+                    }
+                }
+            }
+                GlobalVars.timer_t_min = GlobalVars.timer_t_min - 1;
+        }
+
+        private void RerunTimerTick(object sender, EventArgs e)
+        {
+            string msg = "Температура ниже минимальной, перезапуск приложения " + GlobalVars.filename2 +"!";
+            if (GlobalVars.timer_r_min < 0)
+                {
+                    GlobalVars.timer_r_min = GlobalVars.reload_time_min_file;
+                }
+                if (GlobalVars.timer_r_min == 0)
+                {
+                    Reload(msg);
+            }
+            GlobalVars.timer_r_min = GlobalVars.timer_r_min - 1;
+        }
+
+        private void FanMaxTimerTick(object sender, EventArgs e)
+        {
+            const string msg = "Обороты выше максимальных, перезагрузка!";
+            const string bat = "reboot_fan_max.bat";
+            if (GlobalVars.timer_fan_max < 0)
+            {
+                GlobalVars.timer_fan_max = GlobalVars.time_fan_max;
+            }
+            if (GlobalVars.timer_fan_max == 0)
+            {
+                if (!GlobalVars.reboot3)
+                {
+                    Reboot(msg, bat);
+                    GlobalVars.reboot3 = true;
+                }
+            }
+            GlobalVars.timer_fan_max = GlobalVars.timer_fan_max - 1;
+        }
+
+        private void FanMinTimerTick(object sender, EventArgs e)
+        {
+            const string msg = "Обороты ниже минимальных, перезагрузка!";
+            const string bat = "reboot_fan_min.bat";
+            if (GlobalVars.timer_fan_min < 0)
+            {
+                GlobalVars.timer_fan_min = GlobalVars.time_fan_min;
+            }
+            if (GlobalVars.timer_fan_min == 0)
+            {
+                if (!GlobalVars.reboot4)
+                {
+                    if (GlobalVars.InternetIsActive)
+                    {
+                        Reboot(msg, bat);
+                        GlobalVars.reboot4 = true;
+                    }
+                    else
+                    {
+                        GlobalVars.timer_fan_min = -100;
+                    }
+                }
+            }
+            GlobalVars.timer_fan_min = GlobalVars.timer_fan_min - 1;
+        }
+
+        private void SendDataTimerTick(object sender, EventArgs e)
+        {
+            SendData();
+        }
+
+        private void GpuCoreMinHzTimerTick(object sender, EventArgs e)
+        {
+            const string msg = "Частоты ядра ниже минимальных, перезагрузка!";
+            const string bat = "reboot_clock.bat";
+            if (GlobalVars.timer_clock < 0)
+            {
+                GlobalVars.timer_clock = GlobalVars.time_clock;
+            }
+            if (GlobalVars.timer_clock == 0)
+            {
+                if (!GlobalVars.reboot5)
+                {
+                    if (GlobalVars.InternetIsActive)
+                    {
+                        Reboot(msg, bat);
+                        GlobalVars.reboot5 = true;
+                    }
+                    else
+                    {
+                        GlobalVars.timer_clock = -100;
+                    }
+                }
+            }
+            GlobalVars.timer_clock = GlobalVars.timer_clock - 1;
+        }
+
+        private void GpuMemoryMinHzTimerTick(object sender, EventArgs e)
+        {
+            const string msg = "Частоты памяти ниже минимальных, перезагрузка!";
+            const string bat = "reboot_memory.bat";
+            if (GlobalVars.timer_memory < 0)
+            {
+                GlobalVars.timer_memory = GlobalVars.time_memory;
+            }
+            if (GlobalVars.timer_memory == 0)
+            {
+                if (!GlobalVars.reboot6)
+                {
+                    if (GlobalVars.InternetIsActive)
+                    {
+                        Reboot(msg, bat);
+                        GlobalVars.reboot6 = true;
+                    }
+                    else
+                    {
+                        GlobalVars.timer_memory = -100;
+                    }
+                }
+            }
+            GlobalVars.timer_memory = GlobalVars.timer_memory - 1;
+        }
+
+        private void PingTimerTick(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var ping = new System.Net.NetworkInformation.Ping())
+                {
+                    ping.Send("8.8.8.8");
+                }
+                GlobalVars.InternetIsActive = true;
+                labelStatusInternetPing.Text = "OK";
+                labelStatusInternetPing.ForeColor = Color.Green;
+            }
+            catch (Exception ex)
+            {
+
+                _error.writeLogLine(ex.Message + " INTERNET OFF", "error");
+                labelStatusInternetPing.Text = "Нет доступа к интернету";
+                labelStatusInternetPing.ForeColor = Color.Red;
+                GlobalVars.InternetIsActive = false;
+            }
+}
+
+        private void InternetInactiveTimerTick(object sender, EventArgs e)
+        {
+            const string bat = "reboot_internet.bat";
+
+            DontHaveInternetTimer.Enabled = false;
+            try
+            {
+                if (GlobalVars.timer_inet < 0)
+                {
+                    GlobalVars.timer_inet = GlobalVars.time_internet;
+                }
+                if (GlobalVars.timer_inet == 0)
+                {
+                    if (!GlobalVars.rebootDontHaveInternet)
+                    {
+                        if (!GlobalVars.InternetIsActive)
+                        {
+                            Process.Start(bat);
+                        }
+                        else
+                        {
+                            GlobalVars.timer_inet = -100;
+                        }
+                    }
+                }
+                GlobalVars.timer_inet = GlobalVars.timer_inet - 1;
+            }
+            finally
+            {
+                DontHaveInternetTimer.Enabled = false;
+            }
+
+        }
+
+        private void FellOffTimerTick(object o, EventArgs e)
+        {
+            const string msg = "Карт стало меньше, перезагрузка!";
+            const string bat = "reboot_card.bat";
+
+            FellOffGPUTimer.Enabled = false;
+            try
+            {
+                if (GlobalVars.timer_t_card < 0)
+                {
+                    GlobalVars.timer_t_card = GlobalVars.time_count_GPU;
+                }
+                if (GlobalVars.timer_t_card == 0)
+                {
+                    if (!GlobalVars.IsRebootStarted)
+                    {
+                        if (GlobalVars.InternetIsActive)
+                        {
+                            Reboot(msg, bat);
+                            GlobalVars.IsRebootStarted = true;
+                        }
+                        else
+                        {
+                            GlobalVars.timer_t_card = -100;
+                        }
+                    }
+                }
+                GlobalVars.timer_t_card = GlobalVars.timer_t_card - 1;
+            }
+            finally
+            {
+                FellOffGPUTimer.Enabled = false;
+            }
+
+        }
+
+        private void GPULoadMin_Tick(object sender, EventArgs e)
+        {
+            const string msg = "Нагрузка GPU стала меньше, перезагрузка!";
+            const string bat = "reboot_load.bat";
+
+            GPULoadMin.Enabled = false;
+            try
+            {
+                if (GlobalVars.timer_load_gpu < 0)
+                {
+                    GlobalVars.timer_load_gpu = GlobalVars.time_load_GPU;
+                }
+                if (GlobalVars.timer_load_gpu == 0)
+                {
+                    if (!GlobalVars.rebootLoadGPU)
+                    {
+                        if (GlobalVars.InternetIsActive)
+                        {
+                            Reboot(msg, bat);
+                            GlobalVars.rebootLoadGPU = true;
+                        }
+                        else
+                        {
+                            GlobalVars.timer_load_gpu = -100;
+                        }
+                    }
+                }
+                GlobalVars.timer_load_gpu = GlobalVars.timer_load_gpu - 1;
+            }
+            finally
+            {
+                GPULoadMin.Enabled = false;
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            _log.writeLogLine("Приложение Informer запущено","log");
+        }
+    }
+}
