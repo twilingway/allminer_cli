@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Net;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using OpenHardwareMonitor.Hardware;
 using System.IO;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace Informer
 {
@@ -33,7 +36,7 @@ namespace Informer
             InitializeComponent();
             string fullPath = Application.StartupPath.ToString();
             _manager = new INIManager(fullPath + "\\my.ini");
-            _manager.WritePrivateString("main", "version", "1.3.4");
+            _manager.WritePrivateString("main", "version", "1.3.5");
             Process psiwer;
             psiwer = Process.Start("cmd", @"/c taskkill /f /im launcher_informer.exe");
             psiwer.Close();
@@ -42,18 +45,25 @@ namespace Informer
             _pc.GPUEnabled = true;
             _log = new LogFile("log");
             _error = new LogFile("error");
-            
 
-            InitFromIni();
+
             СheckForNewVersion();
-            f2 = new SettingsForm();
+            InitFromIni();
             
-        }
+            f2 = new SettingsForm();
+           
+            
+         
 
-        private void BtStopClick(object sender, EventArgs e)
+
+        }
+        
+       private void BtStopClick(object sender, EventArgs e)
         {
             GetTempretureTimer.Enabled = false;
             AutoStartTimer.Enabled = false;
+            AutoStartTimer.Stop();
+            timer2.Stop();
             btStop.Visible = false;
             btStart.Enabled = true;
             SendDataTimer.Enabled = false;
@@ -78,9 +88,13 @@ namespace Informer
             GlobalVars.timer_load_gpu = -100;
             GlobalVars.timer_inet = -100;
             _log.writeLogLine("Приложение остановлено","log");
-            EmailTextBox.ReadOnly = false;
-            SecretTextBox.ReadOnly = false;
-            RigTextBox.ReadOnly = false;
+            if (string.IsNullOrEmpty(GlobalVars.token))
+            {
+              //  tbEmail.ReadOnly = false;
+              //  tbSecret.ReadOnly = false;
+              //  tbRigName.ReadOnly = false;
+            }
+            tbToken.ReadOnly = false;
 
         }
         public void InitFromIni()
@@ -88,9 +102,17 @@ namespace Informer
            
             string email          = _manager.GetPrivateString("main", "email");
             string secret         = _manager.GetPrivateString("main", "secret");
-            string worker         = _manager.GetPrivateString("main", "worker");
+            
+            string name = _manager.GetPrivateString("main", "name");
+            string worker;
+            if (string.IsNullOrEmpty(name))
+            {
+                worker = _manager.GetPrivateString("main", "worker");
+                name = worker;
+            }
+            string token          = _manager.GetPrivateString("main", "token");
             string version        = _manager.GetPrivateString("main", "version");
-            string versionSettings = _manager.GetPrivateString("main", "versionSettings");
+           
 
             string reboot_temp_max     = _manager.GetPrivateString("main", "reboot_temp_max");
             string temp_max = _manager.GetPrivateString("main", "temp_max");
@@ -142,16 +164,7 @@ namespace Informer
             string stat = _manager.GetPrivateString("main", "stat");
             string pool = _manager.GetPrivateString("main", "pool");
             string wallet = _manager.GetPrivateString("main", "wallet");
-            //**
-//Установка версии настроек
 
-            if (string.IsNullOrEmpty(versionSettings))
-            {
-                versionSettings = "1";
-                _manager.WritePrivateString("main", "versionSettings", versionSettings);
-            }
-            GlobalVars.versionSettings = versionSettings;
-            //----------------------------****************----------------------------
             //****Перезагрузка температура максимум - НАЧАЛО
             //проверка секбокса
             if (string.IsNullOrEmpty(reboot_temp_max))
@@ -427,35 +440,55 @@ namespace Informer
 
 //----------------------------****************----------------------------
 
-            bool start;
+            bool start = false;
             GlobalVars.email = email;
-            GlobalVars.worker = worker;
+            GlobalVars.name = name;
             GlobalVars.secret = secret;
+            GlobalVars.token = token;
             GlobalVars.versions = version;
 
+            
+            
+         
+        //    tbToken.Text = GlobalVars.token;
 //пока неиспользуется            
-            GlobalVars.stat = stat;
-            GlobalVars.pool = pool;
-            GlobalVars.wallet = wallet;
-//**
-
-            if (string.IsNullOrEmpty(email))
+           // GlobalVars.stat = stat;
+           // GlobalVars.pool = pool;
+           // GlobalVars.wallet = wallet;
+            //**
+            if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(secret) && !string.IsNullOrEmpty(name) && string.IsNullOrEmpty(token))
             {
-                start = false;
-            } else if (string.IsNullOrEmpty(secret))
-            {
-                start = false;
-            } else if (string.IsNullOrEmpty(worker))
-            {
-                start = false;
+                tbEmail.Text = GlobalVars.email;
+                tbSecret.Text = GlobalVars.secret;
+                tbRigName.Text = GlobalVars.name;
+                tbEmail.ReadOnly = true;
+                tbSecret.ReadOnly = true;
+                tbRigName.ReadOnly = true;
+                start = true;
+                
             }
-            else
+
+            if (!string.IsNullOrEmpty(token))
             {
                 start = true;
-                EmailTextBox.Text = email;
-                SecretTextBox.Text = secret;
-                RigTextBox.Text = worker;
+                tbEmail.ReadOnly = true;
+                tbSecret.ReadOnly = true;
+                tbRigName.ReadOnly = true;
+                tbToken.ReadOnly = true;
+                tbRigName.Text = name;
+                tbToken.Text = token;
             }
+
+            if ((string.IsNullOrEmpty(email) || string.IsNullOrEmpty(secret) || string.IsNullOrEmpty(name)) && string.IsNullOrEmpty(token))
+            {
+                start = false;
+                tbEmail.ReadOnly = true;
+                tbSecret.ReadOnly = true;
+                tbRigName.ReadOnly = true;
+                
+            }
+            
+                        
             if (start)
             {
                 timer2.Interval = GlobalVars.time_start * 1000;
@@ -463,6 +496,8 @@ namespace Informer
                 AutoStartTimer.Enabled = true;
                 TimeWorkTimer.Enabled = true;
             }
+           
+
         }
 
         private void GetTempretureTimerTick(object sender, EventArgs e)
@@ -486,17 +521,67 @@ namespace Informer
         {
             GetTempretureTimer.Enabled = true;
             SendDataTimer.Enabled = true;
-            SendData();
             AutoStartTimer.Enabled = false;
             btStop.Visible = true;
             btStart.Enabled = false;
             GlobalVars.timeOnline = 0;
+            tbEmail.ReadOnly = true;
+            tbSecret.ReadOnly = true;
+            tbRigName.ReadOnly = true;
+            tbToken.ReadOnly = true;
+            InformationLabel.Text = "Запущен";
+            InformationLabel.ForeColor = Color.Green;
+            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+            //labelTest.Text = GlobalVars.start_timestamp.ToString();
+            gpu_temp();
+            SendData();
         }
 
         private void AutoStart_Tick(object sender, EventArgs e)
         {
-            GlobalVars.time_start = GlobalVars.time_start - 1;
-            btStart.Text = "Запустить(" + GlobalVars.time_start.ToString() + ")";
+            if (!string.IsNullOrEmpty(GlobalVars.token))
+            {
+                tbToken.ReadOnly = true;
+                timer2.Start();
+                AutoStartTimer.Start();
+                GlobalVars.time_start = GlobalVars.time_start - 1;
+                btStart.Text = "Запустить(" + GlobalVars.time_start.ToString() + ")";
+
+            }
+            else {
+                /*
+                if (string.IsNullOrEmpty(GlobalVars.email))
+                {
+                    timer2.Stop();
+                    AutoStartTimer.Stop();
+                    MessageBox.Show("Введите EMAIL!");
+
+                }
+                else if (string.IsNullOrEmpty(GlobalVars.secret))
+                {
+                    timer2.Stop();
+                    AutoStartTimer.Stop();
+                    MessageBox.Show("Введите SECRET KEY!");
+
+                }
+                else if (string.IsNullOrEmpty(GlobalVars.name))
+                {
+                    timer2.Stop();
+                    AutoStartTimer.Stop();
+                    MessageBox.Show("Задайте имя ригу!");
+
+                }
+                else
+                {
+                
+                }
+                */
+                timer2.Start();
+                AutoStartTimer.Start();
+                GlobalVars.time_start = GlobalVars.time_start - 1;
+                btStart.Text = "Запустить(" + GlobalVars.time_start.ToString() + ")";
+            }
+            
         }
 
         public void gpu_temp()
@@ -1019,50 +1104,143 @@ namespace Informer
         }
         public void SendData()
         {
+
             try
             {
-                string json = _http.GetContent(GlobalVars.host + 
-                    "/api.php?email=" + GlobalVars.email +
-                    "&secret=" + GlobalVars.secret +
-                    "&worker=" + GlobalVars.worker + 
-                    "&gpu=" + GlobalVars.card + 
-                    "&temp=" + GlobalVars.temp + 
-                    "&fan=" + GlobalVars.fan + 
-                    "&timer=" + GlobalVars.timeOnline.ToString() + 
-                    "&v=" + GlobalVars.versions + 
+                if (!string.IsNullOrEmpty(GlobalVars.token))
+                {
+
+                    GlobalVars.json_send = _http.GetContent(GlobalVars.host +
+                    "/api.php?token=" + GlobalVars.token +
+                    "&gpu=" + GlobalVars.card +
+                    "&temp=" + GlobalVars.temp +
+                    "&fan=" + GlobalVars.fan +
+                    "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
+                    "&v=" + GlobalVars.versions +
                     "&load=" + GlobalVars.load +
                     "&clock=" + GlobalVars.clock +
                     "&mem=" + GlobalVars.mem +
-                    "&versionSettings=" + GlobalVars.versionSettings);
+                   // "&pool=" + GlobalVars.pool +
+                    "&hash=" + "417");
+                  //  _log.writeLogLine("Отправка на сайт С токеном и получение ответа " + GlobalVars.json_send, "log");
 
-                if (!string.IsNullOrWhiteSpace(json))
-                {
-                    var response = JsonConvert.DeserializeObject<ApiResponse>(json);
-                    SendDataTimer.Interval = response.settings.interval * 1000;
                 }
+                else if (string.IsNullOrEmpty(GlobalVars.token))
+                {
+                    GlobalVars.json_send = _http.GetContent(GlobalVars.host +
+                    "/api.php?email=" + GlobalVars.email +
+                    "&secret=" + GlobalVars.secret +
+                    "&worker=" + GlobalVars.name +
+                    "&gpu=" + GlobalVars.card +
+                    "&temp=" + GlobalVars.temp +
+                    "&fan=" + GlobalVars.fan +
+                    "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
+                    "&v=" + GlobalVars.versions +
+                    "&load=" + GlobalVars.load +
+                    "&clock=" + GlobalVars.clock +
+                    "&mem=" + GlobalVars.mem +
+                   // "&pool=" + GlobalVars.pool +
+                    "&hash=" + "417");
+                  //  _log.writeLogLine("Отправка на сайт БЕЗ токена и получение ответа " + GlobalVars.json_send, "log");
+
+                }
+                //GlobalVars.json_send = "{"token":"73b41e62c748693a46d5bd6603dc51a0","settings":{"interval":60},"message":"Use token endpoint"}";
+
+
+
+                if (!string.IsNullOrWhiteSpace(GlobalVars.json_send))
+                {
+
+
+                    //var interval = JsonConvert.DeserializeObject<ApiResponse>(File.ReadAllText("json.json"));
+                    var response = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
+                    int test = response.settings.interval;
+                    string test2 = test.ToString();
+                   // _log.writeLogLine("Интервал " + test2, "log");
+
+                    SendDataTimer.Interval = response.settings.interval * 1000;
+
+
+
+
+                    if (GlobalVars.token != response.token && !string.IsNullOrEmpty(response?.token))
+                    {
+
+                       // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
+                        //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
+                        GlobalVars.token = response.token;
+                        _manager.WritePrivateString("main", "token", GlobalVars.token);
+                        tbToken.Text = GlobalVars.token;
+
+                    }
+
+                    if (GlobalVars.name != response.settings.name && !string.IsNullOrEmpty(response.settings?.name))
+                    {
+
+                       // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
+                        //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
+                        GlobalVars.name = response.settings.name;
+                        _manager.WritePrivateString("main", "name", GlobalVars.name);
+                        tbRigName.Text = GlobalVars.name;
+
+                    }
+                    /*
+                    if (GlobalVars.json_send == "Auth failed")
+                    {
+                        MessageBox.Show("Auth failed! неверный токен");
+                    }
+                    */
+                }
+                else {
+                    if (GlobalVars.InternetIsActive == true)
+                    {
+                        MessageBox.Show("Auth failed! Possibly incorrect token!");
+                        SendDataTimer.Interval = 300 * 1000;
+                    }
+
+                }
+                    
+                  
+                    
+
+                
+
+                
             }
             catch (Exception ex)
             {
                 _error.writeLogLine(ex.Message + "function send() Отправка на сайт", "error");
-            }            
+                _error.writeLogLine(ex.Message + "function send() Отправка на сайт " + GlobalVars.json_send, "error");
+
+            }
+
+
         }
+
+        
         public void Reboot(string msg, string bat)
         {
             try
             {
                 GetTempretureTimer.Enabled = false;
                 timer2.Enabled = false;
-                _http.GetContent(GlobalVars.host + 
-                    "/api.php?email=" + GlobalVars.email +
-                    "&secret=" + GlobalVars.secret +
-                    "&worker=" + GlobalVars.worker + 
-                    "&gpu=" + GlobalVars.card + 
-                    "&temp=" + GlobalVars.temp + 
-                    "&fan=" + GlobalVars.fan + 
-                    "&status=reboot" + 
-                    "&msg=" + msg);
+                
+                _http.GetContent(
+                    GlobalVars.host +
+                    "/api.php?token=" + GlobalVars.token +
+                    "&gpu=" + GlobalVars.card +
+                    "&temp=" + GlobalVars.temp +
+                    "&fan=" + GlobalVars.fan +
+                    "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
+                    "&v=" + GlobalVars.versions +
+                    "&load=" + GlobalVars.load +
+                    "&clock=" + GlobalVars.clock +
+                     "&mem=" + GlobalVars.mem +
+                   
+                    "&hash=" + "417");
+                _log.writeLogLine("Перезапуск рига " + msg, "log");
 
-                Process.Start(bat);
+               Process.Start(bat);
             }
             catch (Exception ex)
             {
@@ -1168,7 +1346,7 @@ namespace Informer
                 string pack = _http.GetContent(GlobalVars.host + 
                     "/api.php?email=" + GlobalVars.email +
                     "&secret=" + GlobalVars.secret +
-                    "&worker=" + GlobalVars.worker + 
+                    "&worker=" + GlobalVars.name + 
                     "&gpu=" + GlobalVars.card + 
                     "&temp=" + GlobalVars.temp + 
                     "&fan=" + GlobalVars.fan + 
@@ -1191,7 +1369,7 @@ namespace Informer
                 PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
                 foreach (var item in m.data)
                 {
-                    if (item.id == GlobalVars.worker)
+                    if (item.id == GlobalVars.name)
                     {
                         labelStatusTempMax.Text = item.hashrate.ToString();
                     }
@@ -1204,7 +1382,7 @@ namespace Informer
                 PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
                 foreach (var item in m.data)
                 {
-                    if (item.id == GlobalVars.worker)
+                    if (item.id == GlobalVars.name)
                     {
                         labelStatusTempMax.Text = item.hashrate.ToString();
                     }
@@ -1216,7 +1394,7 @@ namespace Informer
                 PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
                 foreach (var item in m.data)
                 {
-                    if (item.id == GlobalVars.worker)
+                    if (item.id == GlobalVars.name)
                     {
                         labelStatusTempMax.Text = item.hashrate.ToString();
                         // MessageBox.Show(item.hashrate.ToString());
@@ -1229,7 +1407,7 @@ namespace Informer
                 PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
                 foreach (var item in m.data)
                 {
-                    if (item.id == GlobalVars.worker)
+                    if (item.id == GlobalVars.name)
                     {
                         labelStatusTempMax.Text = item.hashrate.ToString();
                         // MessageBox.Show(item.hashrate.ToString());
@@ -1242,7 +1420,7 @@ namespace Informer
                 PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
                 foreach (var item in m.data)
                 {
-                    if (item.id == GlobalVars.worker)
+                    if (item.id == GlobalVars.name)
                     {
                         labelStatusTempMax.Text = item.hashrate.ToString();
                         // MessageBox.Show(item.hashrate.ToString());
@@ -1255,7 +1433,7 @@ namespace Informer
                 PoolInfoResponse m = JsonConvert.DeserializeObject<PoolInfoResponse>(pack);
                 foreach (var item in m.data)
                 {
-                    if (item.id == GlobalVars.worker)
+                    if (item.id == GlobalVars.name)
                     {
                         labelStatusTempMax.Text = item.hashrate.ToString();
                         // MessageBox.Show(item.hashrate.ToString());
@@ -1272,65 +1450,84 @@ namespace Informer
         private void BtStartClick(object sender, EventArgs e)
         {
 
-            string email       = EmailTextBox.Text;
-            string secret      = SecretTextBox.Text;
-            string worker1     = RigTextBox.Text;
+            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+            //labelTest.Text = GlobalVars.start_timestamp.ToString();
+            string email       = tbEmail.Text;
+            string secret      = tbSecret.Text;
+            string name = tbRigName.Text;
+            string token = tbToken.Text;
 
-            if (string.IsNullOrEmpty(email))
+            if (!string.IsNullOrEmpty(token))
             {
-                MessageBox.Show("Введите EMAIL!");
-            }
-            else if (string.IsNullOrEmpty(secret))
-            {
-                MessageBox.Show("Введите SECRET KEY!");
-            }
-            else if (string.IsNullOrEmpty(worker1))
-            {
-                MessageBox.Show("Задайте имя ригу!");
-            }
-            else
-            {
-                _manager.WritePrivateString("main", "email", email);
-                _manager.WritePrivateString("main", "worker", worker1);
-                _manager.WritePrivateString("main", "secret", secret);
+                _manager.WritePrivateString("main", "token", token);
                 GetTempretureTimer.Enabled = true;
 
                 SendDataTimer.Enabled = true;
                 btStart.Enabled = false;
                 btStop.Visible = true;
-                AutoStartTimer.Enabled  = false;
+                AutoStartTimer.Enabled = false;
 
-                string email1  = _manager.GetPrivateString("main", "email");
-                string worker  = _manager.GetPrivateString("main", "worker");
-                string secret1 = _manager.GetPrivateString("main", "secret");
-                
-                //версия настроек + 1
-                string versionSettings1 = _manager.GetPrivateString("main", "versionSettings");
-                int versionSettings2 = 0;
-                versionSettings2 = versionSettings2+Convert.ToInt32(versionSettings1);
-                versionSettings2++;
-                _manager.WritePrivateString("main", "versionSettings", Convert.ToString(versionSettings2));
-                GlobalVars.versionSettings = Convert.ToString(versionSettings2);
-
-
-                GlobalVars.email  = email1;
-                GlobalVars.worker = worker;
-                GlobalVars.secret = secret1;
-
+                GlobalVars.token = token;
+                GlobalVars.name = name;
                 gpu_temp();
-
                
                 _log.writeLogLine("Приложение в работе", "log");
 
                 SendData();
+
                 GlobalVars.timeOnline = 0;
                 InformationLabel.Text = "Запущен";
                 InformationLabel.ForeColor = Color.Green;
-                EmailTextBox.ReadOnly = true;
-                SecretTextBox.ReadOnly = true;
-                RigTextBox.ReadOnly = true;
+                tbEmail.ReadOnly = true;
+                tbSecret.ReadOnly = true;
+                tbRigName.ReadOnly = true;
+                tbToken.ReadOnly = true;
+            }
+            else {
+
+                if (string.IsNullOrEmpty(token) && (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(secret) && !string.IsNullOrEmpty(name)))
+                {
+
+
+                    _manager.WritePrivateString("main", "token", token);
+                    GetTempretureTimer.Enabled = true;
+
+                    SendDataTimer.Enabled = true;
+                    btStart.Enabled = false;
+                    btStop.Visible = true;
+                    AutoStartTimer.Enabled = false;
+
+                    GlobalVars.token = token;
+                    GlobalVars.name = name;
+                    gpu_temp();
+
+
+                    _log.writeLogLine("Приложение в работе", "log");
+
+
+                    SendData();
+
+
+                    GlobalVars.timeOnline = 0;
+                    InformationLabel.Text = "Запущен";
+                    InformationLabel.ForeColor = Color.Green;
+                    tbEmail.ReadOnly = true;
+                    tbSecret.ReadOnly = true;
+                    tbRigName.ReadOnly = true;
+                    tbToken.ReadOnly = true;
+
+                   
+                }
+                
+                else
+                {
+                    MessageBox.Show("Введите token!");
+
+                }
+
 
             }
+              
             InitFromIni();
         }
 
@@ -1447,8 +1644,10 @@ namespace Informer
 
         private void SendDataTimerTick(object sender, EventArgs e)
         {
-            SendData();
+          SendData();
         }
+
+        
 
         private void GpuCoreMinHzTimerTick(object sender, EventArgs e)
         {
@@ -1627,6 +1826,43 @@ namespace Informer
             {
                 GPULoadMin.Enabled = false;
             }
+        }
+
+        private void GetEWBF_ZcashTimer_Tick(object sender, EventArgs e)
+        {
+            GetEWBF_ZcashAPI();
+        }
+
+        private void GetEWBF_ZcashAPI()
+        {
+            throw new NotImplementedException();
+        }
+
+        
+
+        
+private void tbRigName_TextChanged(object sender, EventArgs e)
+{
+   GlobalVars.name = tbRigName.Text;
+   _manager.WritePrivateString("main", "name", GlobalVars.name);
+}
+
+private void tbSecret_TextChanged(object sender, EventArgs e)
+{
+   GlobalVars.secret = tbSecret.Text;
+   _manager.WritePrivateString("main", "secret", GlobalVars.secret);
+}
+
+private void tbEmail_TextChanged(object sender, EventArgs e)
+{
+   GlobalVars.email = tbEmail.Text;
+   _manager.WritePrivateString("main", "email", GlobalVars.email);
+}
+
+        private void tbToken_TextChanged(object sender, EventArgs e)
+        {
+            GlobalVars.token = tbToken.Text;
+            _manager.WritePrivateString("main", "token", GlobalVars.token);
         }
 
         private void MainForm_Load(object sender, EventArgs e)

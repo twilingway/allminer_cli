@@ -251,6 +251,7 @@
             this.combTimeStart.Name = "combTimeStart";
             this.combTimeStart.Size = new System.Drawing.Size(68, 21);
             this.combTimeStart.TabIndex = 36;
+            this.combTimeStart.SelectedIndexChanged += new System.EventHandler(this.combTimeStart_SelectedIndexChanged_1);
             // 
             // label1
             // 
@@ -677,9 +678,9 @@
             this.cbLoadGPU.AutoSize = true;
             this.cbLoadGPU.Location = new System.Drawing.Point(23, 78);
             this.cbLoadGPU.Name = "cbLoadGPU";
-            this.cbLoadGPU.Size = new System.Drawing.Size(310, 17);
+            this.cbLoadGPU.Size = new System.Drawing.Size(304, 17);
             this.cbLoadGPU.TabIndex = 65;
-            this.cbLoadGPU.Text = "Перезагружать если загрузкой GPU меньше или равно";
+            this.cbLoadGPU.Text = "Перезагружать если загрузка GPU меньше или равно";
             this.cbLoadGPU.UseVisualStyleBackColor = true;
             this.cbLoadGPU.CheckedChanged += new System.EventHandler(this.cbLoadGPU_CheckedChanged);
             // 

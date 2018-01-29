@@ -14,6 +14,8 @@ namespace Informer
     public partial class SettingsForm : Form
     {
 
+       
+
         private INIManager manager;
         private LogFile _logs, _errors;
 
@@ -100,13 +102,7 @@ namespace Informer
                 manager.WritePrivateString("main", "time_start", combTimeStart.Text);
                 GlobalVars.time_start = Convert.ToInt32(combTimeStart.Text);
 
-                //версия настроек + 1
-                string versionSettings1 = manager.GetPrivateString("main", "versionSettings");
-                int versionSettings2 = 0;
-                versionSettings2 = versionSettings2 + Convert.ToInt32(versionSettings1);
-                versionSettings2++;
-                manager.WritePrivateString("main", "versionSettings", Convert.ToString(versionSettings2));
-                GlobalVars.versionSettings = Convert.ToString(versionSettings2);
+                
 
                 ZeroingOut();
                 this.Close();
@@ -119,7 +115,7 @@ namespace Informer
         }
         public void ini()
         {
-            string versionSettings1 = manager.GetPrivateString("main", "versionSettings");
+            
 
             string reboot_temp_max = manager.GetPrivateString("main", "reboot_temp_max");
             string temp_max = manager.GetPrivateString("main", "temp_max");
@@ -496,13 +492,7 @@ namespace Informer
             GlobalVars.pathreload = filename;
             GlobalVars.filename = filename1;
 
-            //версия настроек + 1
-            string versionSettings1 = manager.GetPrivateString("main", "versionSettings");
-            int versionSettings2 = 0;
-            versionSettings2 = versionSettings2 + Convert.ToInt32(versionSettings1);
-            versionSettings2++;
-            manager.WritePrivateString("main", "versionSettings", Convert.ToString(versionSettings2));
-            GlobalVars.versionSettings = Convert.ToString(versionSettings2);
+            
             ZeroingOut();
 
         }
@@ -525,13 +515,7 @@ namespace Informer
             GlobalVars.pathreload2 = filename;
             GlobalVars.filename2 = filename1;
 
-            //версия настроек + 1
-            string versionSettings1 = manager.GetPrivateString("main", "versionSettings");
-            int versionSettings2 = 0;
-            versionSettings2 = versionSettings2 + Convert.ToInt32(versionSettings1);
-            versionSettings2++;
-            manager.WritePrivateString("main", "versionSettings", Convert.ToString(versionSettings2));
-            GlobalVars.versionSettings = Convert.ToString(versionSettings2);
+           
             ZeroingOut();
         }
 
@@ -713,6 +697,15 @@ namespace Informer
             {
                 e.Handled = true;
             }
+        }
+
+       
+        private void combTimeStart_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            manager.WritePrivateString("main", "time_start", combTimeStart.GetItemText(combTimeStart.SelectedItem));
+            int.TryParse(combTimeStart.GetItemText(combTimeStart.SelectedItem), out GlobalVars.time_start);
+            ZeroingOut();
+           
         }
 
         private void tbInternetOffSec_KeyPress(object sender, KeyPressEventArgs e)

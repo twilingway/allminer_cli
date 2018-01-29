@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiResponse.cs" />
+    <Compile Include="ApiEWBF.cs" />
     <Compile Include="Datum.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

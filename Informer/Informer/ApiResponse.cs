@@ -18,20 +18,36 @@ using System.IO;
 /// <summary>
 /// Класс представляет собой описание ответа от allminer.ru
 /// </summary>
-public class ApiResponse
+/// 
+namespace Informer
 {
-    /// <summary>
-    /// Настройки Informer-а хранящиеся на сервере
-    /// </summary>
-    public Settings settings { get; set; }
+    public class ApiResponse
+    {
+        /// <summary>
+        /// Настройки Informer-а хранящиеся на сервере
+        /// </summary>
+        // public Settings settings { get; set; }
+        //public RootObject root { get; set; }
+        public string token { get; set; }
+        public Settings settings { get; set; }
+        //public string name { get; set; }
+        public string message { get; set; }
 
+    }
 
     public class Settings
     {
-        /// <summary>
+        /// <summary
         /// Интервал в секундах, как часто отправлять данные
         /// </summary>
         public int interval { get; set; }
+        public string name { get; set; }
+        /// <summary>
+        /// </summary>
+
     }
+
+
+
 }
 

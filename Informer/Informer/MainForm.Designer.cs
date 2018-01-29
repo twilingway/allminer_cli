@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.EmailTextBox = new System.Windows.Forms.TextBox();
-            this.SecretTextBox = new System.Windows.Forms.TextBox();
-            this.RigTextBox = new System.Windows.Forms.TextBox();
+            this.tbEmail = new System.Windows.Forms.TextBox();
+            this.tbSecret = new System.Windows.Forms.TextBox();
+            this.tbRigName = new System.Windows.Forms.TextBox();
             this.labelEmail = new System.Windows.Forms.Label();
             this.labelSecret = new System.Windows.Forms.Label();
             this.labelRigName = new System.Windows.Forms.Label();
@@ -48,7 +48,6 @@
             this.TimeWorkTimer = new System.Windows.Forms.Timer(this.components);
             this.btSettings = new System.Windows.Forms.Button();
             this.GPUTempMaxTimer = new System.Windows.Forms.Timer(this.components);
-            this.button4 = new System.Windows.Forms.Button();
             this.GPUTempMinTimer = new System.Windows.Forms.Timer(this.components);
             this.ReloadMinerTimer = new System.Windows.Forms.Timer(this.components);
             this.InformationLabel = new System.Windows.Forms.Label();
@@ -94,28 +93,33 @@
             this.labelStatusLoadGPU = new System.Windows.Forms.Label();
             this.labelLoadGPU = new System.Windows.Forms.Label();
             this.GPULoadMin = new System.Windows.Forms.Timer(this.components);
+            this.labelTest = new System.Windows.Forms.Label();
+            this.GetEWBF_ZcashTimer = new System.Windows.Forms.Timer(this.components);
+            this.labelToken = new System.Windows.Forms.Label();
+            this.tbToken = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // EmailTextBox
+            // tbEmail
             // 
-            this.EmailTextBox.Location = new System.Drawing.Point(111, 6);
-            this.EmailTextBox.Name = "EmailTextBox";
-            this.EmailTextBox.Size = new System.Drawing.Size(218, 20);
-            this.EmailTextBox.TabIndex = 0;
+            this.tbEmail.Location = new System.Drawing.Point(111, 6);
+            this.tbEmail.Name = "tbEmail";
+            this.tbEmail.Size = new System.Drawing.Size(218, 20);
+            this.tbEmail.TabIndex = 0;
             // 
-            // SecretTextBox
+            // tbSecret
             // 
-            this.SecretTextBox.Location = new System.Drawing.Point(111, 32);
-            this.SecretTextBox.Name = "SecretTextBox";
-            this.SecretTextBox.Size = new System.Drawing.Size(218, 20);
-            this.SecretTextBox.TabIndex = 1;
+            this.tbSecret.Location = new System.Drawing.Point(111, 32);
+            this.tbSecret.Name = "tbSecret";
+            this.tbSecret.Size = new System.Drawing.Size(218, 20);
+            this.tbSecret.TabIndex = 1;
             // 
-            // RigTextBox
+            // tbRigName
             // 
-            this.RigTextBox.Location = new System.Drawing.Point(111, 58);
-            this.RigTextBox.Name = "RigTextBox";
-            this.RigTextBox.Size = new System.Drawing.Size(218, 20);
-            this.RigTextBox.TabIndex = 2;
+            this.tbRigName.Location = new System.Drawing.Point(111, 59);
+            this.tbRigName.Name = "tbRigName";
+            this.tbRigName.Size = new System.Drawing.Size(218, 20);
+            this.tbRigName.TabIndex = 2;
+            this.tbRigName.TextChanged += new System.EventHandler(this.tbRigName_TextChanged);
             // 
             // labelEmail
             // 
@@ -146,7 +150,7 @@
             // 
             // btStart
             // 
-            this.btStart.Location = new System.Drawing.Point(111, 383);
+            this.btStart.Location = new System.Drawing.Point(111, 405);
             this.btStart.Name = "btStart";
             this.btStart.Size = new System.Drawing.Size(190, 30);
             this.btStart.TabIndex = 6;
@@ -156,7 +160,7 @@
             // 
             // btStop
             // 
-            this.btStop.Location = new System.Drawing.Point(111, 419);
+            this.btStop.Location = new System.Drawing.Point(111, 441);
             this.btStop.Name = "btStop";
             this.btStop.Size = new System.Drawing.Size(190, 25);
             this.btStop.TabIndex = 7;
@@ -167,7 +171,7 @@
             // InfoLabel
             // 
             this.InfoLabel.AutoSize = true;
-            this.InfoLabel.Location = new System.Drawing.Point(31, 93);
+            this.InfoLabel.Location = new System.Drawing.Point(31, 115);
             this.InfoLabel.Name = "InfoLabel";
             this.InfoLabel.Size = new System.Drawing.Size(76, 13);
             this.InfoLabel.TabIndex = 8;
@@ -176,7 +180,7 @@
             // labelTimeWork
             // 
             this.labelTimeWork.AutoSize = true;
-            this.labelTimeWork.Location = new System.Drawing.Point(31, 115);
+            this.labelTimeWork.Location = new System.Drawing.Point(31, 137);
             this.labelTimeWork.Name = "labelTimeWork";
             this.labelTimeWork.Size = new System.Drawing.Size(83, 13);
             this.labelTimeWork.TabIndex = 9;
@@ -185,7 +189,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(108, 476);
+            this.linkLabel1.Location = new System.Drawing.Point(108, 498);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(72, 13);
             this.linkLabel1.TabIndex = 11;
@@ -226,7 +230,7 @@
             // 
             // btSettings
             // 
-            this.btSettings.Location = new System.Drawing.Point(111, 450);
+            this.btSettings.Location = new System.Drawing.Point(111, 472);
             this.btSettings.Name = "btSettings";
             this.btSettings.Size = new System.Drawing.Size(190, 23);
             this.btSettings.TabIndex = 12;
@@ -239,16 +243,6 @@
             this.GPUTempMaxTimer.Interval = 1000;
             this.GPUTempMaxTimer.Tag = "t_max";
             this.GPUTempMaxTimer.Tick += new System.EventHandler(this.TempretureTimerTick);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(30, 390);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 13;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Visible = false;
             // 
             // GPUTempMinTimer
             // 
@@ -265,7 +259,7 @@
             // InformationLabel
             // 
             this.InformationLabel.AutoSize = true;
-            this.InformationLabel.Location = new System.Drawing.Point(114, 93);
+            this.InformationLabel.Location = new System.Drawing.Point(114, 115);
             this.InformationLabel.Name = "InformationLabel";
             this.InformationLabel.Size = new System.Drawing.Size(106, 13);
             this.InformationLabel.TabIndex = 14;
@@ -274,7 +268,7 @@
             // labelStatusTempMax
             // 
             this.labelStatusTempMax.AutoSize = true;
-            this.labelStatusTempMax.Location = new System.Drawing.Point(158, 160);
+            this.labelStatusTempMax.Location = new System.Drawing.Point(158, 182);
             this.labelStatusTempMax.Name = "labelStatusTempMax";
             this.labelStatusTempMax.Size = new System.Drawing.Size(49, 13);
             this.labelStatusTempMax.TabIndex = 15;
@@ -283,7 +277,7 @@
             // labelTimeWork2
             // 
             this.labelTimeWork2.AutoSize = true;
-            this.labelTimeWork2.Location = new System.Drawing.Point(134, 115);
+            this.labelTimeWork2.Location = new System.Drawing.Point(134, 137);
             this.labelTimeWork2.Name = "labelTimeWork2";
             this.labelTimeWork2.Size = new System.Drawing.Size(137, 13);
             this.labelTimeWork2.TabIndex = 16;
@@ -304,7 +298,7 @@
             // labelCounterTempMax
             // 
             this.labelCounterTempMax.AutoSize = true;
-            this.labelCounterTempMax.Location = new System.Drawing.Point(312, 160);
+            this.labelCounterTempMax.Location = new System.Drawing.Point(312, 182);
             this.labelCounterTempMax.Name = "labelCounterTempMax";
             this.labelCounterTempMax.Size = new System.Drawing.Size(70, 13);
             this.labelCounterTempMax.TabIndex = 17;
@@ -313,7 +307,7 @@
             // labelTempMax
             // 
             this.labelTempMax.AutoSize = true;
-            this.labelTempMax.Location = new System.Drawing.Point(32, 160);
+            this.labelTempMax.Location = new System.Drawing.Point(32, 182);
             this.labelTempMax.Name = "labelTempMax";
             this.labelTempMax.Size = new System.Drawing.Size(113, 13);
             this.labelTempMax.TabIndex = 18;
@@ -328,7 +322,7 @@
             // labelFanMax
             // 
             this.labelFanMax.AutoSize = true;
-            this.labelFanMax.Location = new System.Drawing.Point(32, 201);
+            this.labelFanMax.Location = new System.Drawing.Point(32, 223);
             this.labelFanMax.Name = "labelFanMax";
             this.labelFanMax.Size = new System.Drawing.Size(104, 13);
             this.labelFanMax.TabIndex = 19;
@@ -337,7 +331,7 @@
             // labelStatusTempMin
             // 
             this.labelStatusTempMin.AutoSize = true;
-            this.labelStatusTempMin.Location = new System.Drawing.Point(158, 179);
+            this.labelStatusTempMin.Location = new System.Drawing.Point(158, 201);
             this.labelStatusTempMin.Name = "labelStatusTempMin";
             this.labelStatusTempMin.Size = new System.Drawing.Size(40, 13);
             this.labelStatusTempMin.TabIndex = 20;
@@ -346,7 +340,7 @@
             // labelCounterTempMin
             // 
             this.labelCounterTempMin.AutoSize = true;
-            this.labelCounterTempMin.Location = new System.Drawing.Point(312, 179);
+            this.labelCounterTempMin.Location = new System.Drawing.Point(312, 201);
             this.labelCounterTempMin.Name = "labelCounterTempMin";
             this.labelCounterTempMin.Size = new System.Drawing.Size(46, 13);
             this.labelCounterTempMin.TabIndex = 21;
@@ -355,7 +349,7 @@
             // labelTempMin
             // 
             this.labelTempMin.AutoSize = true;
-            this.labelTempMin.Location = new System.Drawing.Point(32, 179);
+            this.labelTempMin.Location = new System.Drawing.Point(32, 201);
             this.labelTempMin.Name = "labelTempMin";
             this.labelTempMin.Size = new System.Drawing.Size(110, 13);
             this.labelTempMin.TabIndex = 22;
@@ -364,7 +358,7 @@
             // labelReloadFile
             // 
             this.labelReloadFile.AutoSize = true;
-            this.labelReloadFile.Location = new System.Drawing.Point(32, 246);
+            this.labelReloadFile.Location = new System.Drawing.Point(32, 268);
             this.labelReloadFile.Name = "labelReloadFile";
             this.labelReloadFile.Size = new System.Drawing.Size(126, 13);
             this.labelReloadFile.TabIndex = 23;
@@ -373,7 +367,7 @@
             // labelStatusReloadFile
             // 
             this.labelStatusReloadFile.AutoSize = true;
-            this.labelStatusReloadFile.Location = new System.Drawing.Point(158, 246);
+            this.labelStatusReloadFile.Location = new System.Drawing.Point(158, 268);
             this.labelStatusReloadFile.Name = "labelStatusReloadFile";
             this.labelStatusReloadFile.Size = new System.Drawing.Size(61, 13);
             this.labelStatusReloadFile.TabIndex = 24;
@@ -382,7 +376,7 @@
             // labelCounterReloadFile
             // 
             this.labelCounterReloadFile.AutoSize = true;
-            this.labelCounterReloadFile.Location = new System.Drawing.Point(312, 246);
+            this.labelCounterReloadFile.Location = new System.Drawing.Point(312, 268);
             this.labelCounterReloadFile.Name = "labelCounterReloadFile";
             this.labelCounterReloadFile.Size = new System.Drawing.Size(73, 13);
             this.labelCounterReloadFile.TabIndex = 25;
@@ -391,7 +385,7 @@
             // labelFanMin
             // 
             this.labelFanMin.AutoSize = true;
-            this.labelFanMin.Location = new System.Drawing.Point(32, 223);
+            this.labelFanMin.Location = new System.Drawing.Point(32, 245);
             this.labelFanMin.Name = "labelFanMin";
             this.labelFanMin.Size = new System.Drawing.Size(101, 13);
             this.labelFanMin.TabIndex = 26;
@@ -400,7 +394,7 @@
             // labelStatusFanMax
             // 
             this.labelStatusFanMax.AutoSize = true;
-            this.labelStatusFanMax.Location = new System.Drawing.Point(158, 201);
+            this.labelStatusFanMax.Location = new System.Drawing.Point(158, 223);
             this.labelStatusFanMax.Name = "labelStatusFanMax";
             this.labelStatusFanMax.Size = new System.Drawing.Size(43, 13);
             this.labelStatusFanMax.TabIndex = 27;
@@ -409,7 +403,7 @@
             // labelCounterFanMax
             // 
             this.labelCounterFanMax.AutoSize = true;
-            this.labelCounterFanMax.Location = new System.Drawing.Point(312, 201);
+            this.labelCounterFanMax.Location = new System.Drawing.Point(312, 223);
             this.labelCounterFanMax.Name = "labelCounterFanMax";
             this.labelCounterFanMax.Size = new System.Drawing.Size(52, 13);
             this.labelCounterFanMax.TabIndex = 28;
@@ -418,7 +412,7 @@
             // labelStatusFanMin
             // 
             this.labelStatusFanMin.AutoSize = true;
-            this.labelStatusFanMin.Location = new System.Drawing.Point(158, 223);
+            this.labelStatusFanMin.Location = new System.Drawing.Point(158, 245);
             this.labelStatusFanMin.Name = "labelStatusFanMin";
             this.labelStatusFanMin.Size = new System.Drawing.Size(49, 13);
             this.labelStatusFanMin.TabIndex = 29;
@@ -427,7 +421,7 @@
             // labelCounterFanMin
             // 
             this.labelCounterFanMin.AutoSize = true;
-            this.labelCounterFanMin.Location = new System.Drawing.Point(312, 223);
+            this.labelCounterFanMin.Location = new System.Drawing.Point(312, 245);
             this.labelCounterFanMin.Name = "labelCounterFanMin";
             this.labelCounterFanMin.Size = new System.Drawing.Size(64, 13);
             this.labelCounterFanMin.TabIndex = 30;
@@ -448,7 +442,7 @@
             // labelClock
             // 
             this.labelClock.AutoSize = true;
-            this.labelClock.Location = new System.Drawing.Point(32, 269);
+            this.labelClock.Location = new System.Drawing.Point(32, 291);
             this.labelClock.Name = "labelClock";
             this.labelClock.Size = new System.Drawing.Size(92, 13);
             this.labelClock.TabIndex = 31;
@@ -457,7 +451,7 @@
             // labelMemory
             // 
             this.labelMemory.AutoSize = true;
-            this.labelMemory.Location = new System.Drawing.Point(32, 290);
+            this.labelMemory.Location = new System.Drawing.Point(32, 312);
             this.labelMemory.Name = "labelMemory";
             this.labelMemory.Size = new System.Drawing.Size(105, 13);
             this.labelMemory.TabIndex = 32;
@@ -466,7 +460,7 @@
             // labelStatusClock
             // 
             this.labelStatusClock.AutoSize = true;
-            this.labelStatusClock.Location = new System.Drawing.Point(158, 269);
+            this.labelStatusClock.Location = new System.Drawing.Point(158, 291);
             this.labelStatusClock.Name = "labelStatusClock";
             this.labelStatusClock.Size = new System.Drawing.Size(49, 13);
             this.labelStatusClock.TabIndex = 33;
@@ -475,7 +469,7 @@
             // labelCounterClock
             // 
             this.labelCounterClock.AutoSize = true;
-            this.labelCounterClock.Location = new System.Drawing.Point(312, 269);
+            this.labelCounterClock.Location = new System.Drawing.Point(312, 291);
             this.labelCounterClock.Name = "labelCounterClock";
             this.labelCounterClock.Size = new System.Drawing.Size(67, 13);
             this.labelCounterClock.TabIndex = 34;
@@ -484,7 +478,7 @@
             // labelStatusMemory
             // 
             this.labelStatusMemory.AutoSize = true;
-            this.labelStatusMemory.Location = new System.Drawing.Point(158, 290);
+            this.labelStatusMemory.Location = new System.Drawing.Point(158, 312);
             this.labelStatusMemory.Name = "labelStatusMemory";
             this.labelStatusMemory.Size = new System.Drawing.Size(79, 13);
             this.labelStatusMemory.TabIndex = 35;
@@ -493,7 +487,7 @@
             // labelCounterMemory
             // 
             this.labelCounterMemory.AutoSize = true;
-            this.labelCounterMemory.Location = new System.Drawing.Point(312, 290);
+            this.labelCounterMemory.Location = new System.Drawing.Point(312, 312);
             this.labelCounterMemory.Name = "labelCounterMemory";
             this.labelCounterMemory.Size = new System.Drawing.Size(64, 13);
             this.labelCounterMemory.TabIndex = 36;
@@ -509,7 +503,7 @@
             // labelInternetPing
             // 
             this.labelInternetPing.AutoSize = true;
-            this.labelInternetPing.Location = new System.Drawing.Point(31, 137);
+            this.labelInternetPing.Location = new System.Drawing.Point(31, 159);
             this.labelInternetPing.Name = "labelInternetPing";
             this.labelInternetPing.Size = new System.Drawing.Size(105, 13);
             this.labelInternetPing.TabIndex = 37;
@@ -518,7 +512,7 @@
             // labelStatusInternetPing
             // 
             this.labelStatusInternetPing.AutoSize = true;
-            this.labelStatusInternetPing.Location = new System.Drawing.Point(159, 137);
+            this.labelStatusInternetPing.Location = new System.Drawing.Point(159, 159);
             this.labelStatusInternetPing.Name = "labelStatusInternetPing";
             this.labelStatusInternetPing.Size = new System.Drawing.Size(73, 13);
             this.labelStatusInternetPing.TabIndex = 38;
@@ -538,7 +532,7 @@
             // labelFellOffGPU
             // 
             this.labelFellOffGPU.AutoSize = true;
-            this.labelFellOffGPU.Location = new System.Drawing.Point(32, 332);
+            this.labelFellOffGPU.Location = new System.Drawing.Point(32, 354);
             this.labelFellOffGPU.Name = "labelFellOffGPU";
             this.labelFellOffGPU.Size = new System.Drawing.Size(120, 13);
             this.labelFellOffGPU.TabIndex = 39;
@@ -547,7 +541,7 @@
             // labelStatusFellOffGPU
             // 
             this.labelStatusFellOffGPU.AutoSize = true;
-            this.labelStatusFellOffGPU.Location = new System.Drawing.Point(158, 332);
+            this.labelStatusFellOffGPU.Location = new System.Drawing.Point(158, 354);
             this.labelStatusFellOffGPU.Name = "labelStatusFellOffGPU";
             this.labelStatusFellOffGPU.Size = new System.Drawing.Size(64, 13);
             this.labelStatusFellOffGPU.TabIndex = 40;
@@ -556,7 +550,7 @@
             // labelCounerFellOff
             // 
             this.labelCounerFellOff.AutoSize = true;
-            this.labelCounerFellOff.Location = new System.Drawing.Point(312, 332);
+            this.labelCounerFellOff.Location = new System.Drawing.Point(312, 354);
             this.labelCounerFellOff.Name = "labelCounerFellOff";
             this.labelCounerFellOff.Size = new System.Drawing.Size(70, 13);
             this.labelCounerFellOff.TabIndex = 41;
@@ -565,7 +559,7 @@
             // labelInternet
             // 
             this.labelInternet.AutoSize = true;
-            this.labelInternet.Location = new System.Drawing.Point(32, 353);
+            this.labelInternet.Location = new System.Drawing.Point(32, 375);
             this.labelInternet.Name = "labelInternet";
             this.labelInternet.Size = new System.Drawing.Size(103, 13);
             this.labelInternet.TabIndex = 42;
@@ -574,7 +568,7 @@
             // labelStatusInternet
             // 
             this.labelStatusInternet.AutoSize = true;
-            this.labelStatusInternet.Location = new System.Drawing.Point(158, 353);
+            this.labelStatusInternet.Location = new System.Drawing.Point(158, 375);
             this.labelStatusInternet.Name = "labelStatusInternet";
             this.labelStatusInternet.Size = new System.Drawing.Size(43, 13);
             this.labelStatusInternet.TabIndex = 43;
@@ -583,7 +577,7 @@
             // label3CounterInternet
             // 
             this.label3CounterInternet.AutoSize = true;
-            this.label3CounterInternet.Location = new System.Drawing.Point(311, 353);
+            this.label3CounterInternet.Location = new System.Drawing.Point(311, 375);
             this.label3CounterInternet.Name = "label3CounterInternet";
             this.label3CounterInternet.Size = new System.Drawing.Size(73, 13);
             this.label3CounterInternet.TabIndex = 44;
@@ -592,7 +586,7 @@
             // labelCounterLoadGPU
             // 
             this.labelCounterLoadGPU.AutoSize = true;
-            this.labelCounterLoadGPU.Location = new System.Drawing.Point(312, 311);
+            this.labelCounterLoadGPU.Location = new System.Drawing.Point(312, 333);
             this.labelCounterLoadGPU.Name = "labelCounterLoadGPU";
             this.labelCounterLoadGPU.Size = new System.Drawing.Size(64, 13);
             this.labelCounterLoadGPU.TabIndex = 47;
@@ -601,7 +595,7 @@
             // labelStatusLoadGPU
             // 
             this.labelStatusLoadGPU.AutoSize = true;
-            this.labelStatusLoadGPU.Location = new System.Drawing.Point(158, 311);
+            this.labelStatusLoadGPU.Location = new System.Drawing.Point(158, 333);
             this.labelStatusLoadGPU.Name = "labelStatusLoadGPU";
             this.labelStatusLoadGPU.Size = new System.Drawing.Size(79, 13);
             this.labelStatusLoadGPU.TabIndex = 46;
@@ -610,7 +604,7 @@
             // labelLoadGPU
             // 
             this.labelLoadGPU.AutoSize = true;
-            this.labelLoadGPU.Location = new System.Drawing.Point(32, 311);
+            this.labelLoadGPU.Location = new System.Drawing.Point(32, 333);
             this.labelLoadGPU.Name = "labelLoadGPU";
             this.labelLoadGPU.Size = new System.Drawing.Size(112, 13);
             this.labelLoadGPU.TabIndex = 45;
@@ -622,11 +616,45 @@
             this.GPULoadMin.Tag = "load";
             this.GPULoadMin.Tick += new System.EventHandler(this.GPULoadMin_Tick);
             // 
+            // labelTest
+            // 
+            this.labelTest.AutoSize = true;
+            this.labelTest.Location = new System.Drawing.Point(30, 481);
+            this.labelTest.Name = "labelTest";
+            this.labelTest.Size = new System.Drawing.Size(50, 13);
+            this.labelTest.TabIndex = 48;
+            this.labelTest.Text = "labelTest";
+            this.labelTest.Visible = false;
+            // 
+            // GetEWBF_ZcashTimer
+            // 
+            this.GetEWBF_ZcashTimer.Tick += new System.EventHandler(this.GetEWBF_ZcashTimer_Tick);
+            // 
+            // labelToken
+            // 
+            this.labelToken.AutoSize = true;
+            this.labelToken.Location = new System.Drawing.Point(31, 91);
+            this.labelToken.Name = "labelToken";
+            this.labelToken.Size = new System.Drawing.Size(41, 13);
+            this.labelToken.TabIndex = 49;
+            this.labelToken.Text = "Token:";
+            // 
+            // tbToken
+            // 
+            this.tbToken.Location = new System.Drawing.Point(111, 86);
+            this.tbToken.Name = "tbToken";
+            this.tbToken.Size = new System.Drawing.Size(218, 20);
+            this.tbToken.TabIndex = 50;
+            this.tbToken.TextChanged += new System.EventHandler(this.tbToken_TextChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(387, 505);
+            this.ClientSize = new System.Drawing.Size(387, 551);
+            this.Controls.Add(this.tbToken);
+            this.Controls.Add(this.labelToken);
+            this.Controls.Add(this.labelTest);
             this.Controls.Add(this.labelCounterLoadGPU);
             this.Controls.Add(this.labelStatusLoadGPU);
             this.Controls.Add(this.labelLoadGPU);
@@ -661,7 +689,6 @@
             this.Controls.Add(this.labelTimeWork2);
             this.Controls.Add(this.labelStatusTempMax);
             this.Controls.Add(this.InformationLabel);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.btSettings);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.labelTimeWork);
@@ -671,14 +698,14 @@
             this.Controls.Add(this.labelRigName);
             this.Controls.Add(this.labelSecret);
             this.Controls.Add(this.labelEmail);
-            this.Controls.Add(this.RigTextBox);
-            this.Controls.Add(this.SecretTextBox);
-            this.Controls.Add(this.EmailTextBox);
+            this.Controls.Add(this.tbRigName);
+            this.Controls.Add(this.tbSecret);
+            this.Controls.Add(this.tbEmail);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Informer | Allminer.ru v1.3.4";
+            this.Text = "Informer | Allminer.ru v1.3.5";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -687,9 +714,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox EmailTextBox;
-        private System.Windows.Forms.TextBox SecretTextBox;
-        private System.Windows.Forms.TextBox RigTextBox;
+        private System.Windows.Forms.TextBox tbEmail;
+        private System.Windows.Forms.TextBox tbSecret;
+        private System.Windows.Forms.TextBox tbRigName;
         private System.Windows.Forms.Label labelEmail;
         private System.Windows.Forms.Label labelSecret;
         private System.Windows.Forms.Label labelRigName;
@@ -705,7 +732,6 @@
         private System.Windows.Forms.Timer TimeWorkTimer;
         private System.Windows.Forms.Button btSettings;
         private System.Windows.Forms.Timer GPUTempMaxTimer;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Timer GPUTempMinTimer;
         private System.Windows.Forms.Timer ReloadMinerTimer;
         private System.Windows.Forms.Label InformationLabel;
@@ -751,6 +777,10 @@
         private System.Windows.Forms.Label labelStatusLoadGPU;
         private System.Windows.Forms.Label labelLoadGPU;
         private System.Windows.Forms.Timer GPULoadMin;
+        private System.Windows.Forms.Label labelTest;
+        private System.Windows.Forms.Timer GetEWBF_ZcashTimer;
+        private System.Windows.Forms.Label labelToken;
+        private System.Windows.Forms.TextBox tbToken;
     }
 }
 
