@@ -87,7 +87,7 @@ namespace Informer
             catch (Exception ex)
             {
                 LogFile Log = new LogFile("error");
-                Log.writeLogLine(ex.Message,"error");
+                Log.writeLogLine("Http: " + ex.Message,"error");
                 return "";
             }
         }

@@ -36,7 +36,7 @@ namespace Informer
             InitializeComponent();
             string fullPath = Application.StartupPath.ToString();
             _manager = new INIManager(fullPath + "\\my.ini");
-            _manager.WritePrivateString("main", "version", "1.3.5");
+            _manager.WritePrivateString("main", "version", "1.3.6");
             Process psiwer;
             psiwer = Process.Start("cmd", @"/c taskkill /f /im launcher_informer.exe");
             psiwer.Close();
@@ -1184,6 +1184,9 @@ namespace Informer
                         tbRigName.Text = GlobalVars.name;
 
                     }
+
+                    InformationLabel.Text = "Authorization OK";
+                    InformationLabel.ForeColor = Color.Green;
                     /*
                     if (GlobalVars.json_send == "Auth failed")
                     {
@@ -1192,10 +1195,15 @@ namespace Informer
                     */
                 }
                 else {
-                    if (GlobalVars.InternetIsActive == true)
+                    if (GlobalVars.InternetIsActive == true )
                     {
-                        MessageBox.Show("Auth failed! Possibly incorrect token!");
-                        SendDataTimer.Interval = 300 * 1000;
+
+                        //MessageBox.Show("Auth failed! Possibly incorrect token!");
+                        // _error.writeLogLine(ex.Message, "error");
+                        // SendDataTimer.Interval = 300 * 1000;
+                        InformationLabel.Text = "Authorization failed";
+                        InformationLabel.ForeColor = Color.Red;
+
                     }
 
                 }
@@ -1476,8 +1484,8 @@ namespace Informer
                 SendData();
 
                 GlobalVars.timeOnline = 0;
-                InformationLabel.Text = "Запущен";
-                InformationLabel.ForeColor = Color.Green;
+               // InformationLabel.Text = "Запущен";
+               // InformationLabel.ForeColor = Color.Green;
                 tbEmail.ReadOnly = true;
                 tbSecret.ReadOnly = true;
                 tbRigName.ReadOnly = true;
