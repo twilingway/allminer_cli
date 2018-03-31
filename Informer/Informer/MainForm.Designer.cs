@@ -40,7 +40,7 @@
             this.btStop = new System.Windows.Forms.Button();
             this.InfoLabel = new System.Windows.Forms.Label();
             this.labelTimeWork = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.linkLabelUpdate = new System.Windows.Forms.LinkLabel();
             this.GetTempretureTimer = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.AutoStartTimer = new System.Windows.Forms.Timer(this.components);
@@ -97,109 +97,72 @@
             this.GetEWBF_ZcashTimer = new System.Windows.Forms.Timer(this.components);
             this.labelToken = new System.Windows.Forms.Label();
             this.tbToken = new System.Windows.Forms.TextBox();
+            this.btExit = new System.Windows.Forms.Button();
+            this.cbLocalize = new System.Windows.Forms.ComboBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // tbEmail
             // 
-            this.tbEmail.Location = new System.Drawing.Point(111, 476);
+            resources.ApplyResources(this.tbEmail, "tbEmail");
             this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(218, 20);
-            this.tbEmail.TabIndex = 0;
-            this.tbEmail.Visible = false;
             // 
             // tbSecret
             // 
-            this.tbSecret.Location = new System.Drawing.Point(111, 502);
+            resources.ApplyResources(this.tbSecret, "tbSecret");
             this.tbSecret.Name = "tbSecret";
-            this.tbSecret.Size = new System.Drawing.Size(218, 20);
-            this.tbSecret.TabIndex = 1;
-            this.tbSecret.Visible = false;
             // 
             // tbRigName
             // 
-            this.tbRigName.Location = new System.Drawing.Point(111, 11);
+            resources.ApplyResources(this.tbRigName, "tbRigName");
             this.tbRigName.Name = "tbRigName";
-            this.tbRigName.Size = new System.Drawing.Size(218, 20);
-            this.tbRigName.TabIndex = 2;
             this.tbRigName.TextChanged += new System.EventHandler(this.tbRigName_TextChanged);
             // 
             // labelEmail
             // 
-            this.labelEmail.AutoSize = true;
-            this.labelEmail.Location = new System.Drawing.Point(32, 479);
+            resources.ApplyResources(this.labelEmail, "labelEmail");
             this.labelEmail.Name = "labelEmail";
-            this.labelEmail.Size = new System.Drawing.Size(35, 13);
-            this.labelEmail.TabIndex = 3;
-            this.labelEmail.Text = "Email:";
-            this.labelEmail.Visible = false;
             // 
             // labelSecret
             // 
-            this.labelSecret.AutoSize = true;
-            this.labelSecret.Location = new System.Drawing.Point(32, 505);
+            resources.ApplyResources(this.labelSecret, "labelSecret");
             this.labelSecret.Name = "labelSecret";
-            this.labelSecret.Size = new System.Drawing.Size(41, 13);
-            this.labelSecret.TabIndex = 4;
-            this.labelSecret.Text = "Secret:";
-            this.labelSecret.Visible = false;
             // 
             // labelRigName
             // 
-            this.labelRigName.AutoSize = true;
-            this.labelRigName.Location = new System.Drawing.Point(31, 17);
+            resources.ApplyResources(this.labelRigName, "labelRigName");
             this.labelRigName.Name = "labelRigName";
-            this.labelRigName.Size = new System.Drawing.Size(55, 13);
-            this.labelRigName.TabIndex = 5;
-            this.labelRigName.Text = "Rig name:";
             // 
             // btStart
             // 
-            this.btStart.Location = new System.Drawing.Point(111, 357);
+            resources.ApplyResources(this.btStart, "btStart");
             this.btStart.Name = "btStart";
-            this.btStart.Size = new System.Drawing.Size(190, 30);
-            this.btStart.TabIndex = 6;
-            this.btStart.Text = "Запустить";
             this.btStart.UseVisualStyleBackColor = true;
             this.btStart.Click += new System.EventHandler(this.BtStartClick);
             // 
             // btStop
             // 
-            this.btStop.Location = new System.Drawing.Point(111, 393);
+            resources.ApplyResources(this.btStop, "btStop");
             this.btStop.Name = "btStop";
-            this.btStop.Size = new System.Drawing.Size(190, 25);
-            this.btStop.TabIndex = 7;
-            this.btStop.Text = "Остановить";
             this.btStop.UseVisualStyleBackColor = true;
             this.btStop.Click += new System.EventHandler(this.BtStopClick);
             // 
             // InfoLabel
             // 
-            this.InfoLabel.AutoSize = true;
-            this.InfoLabel.Location = new System.Drawing.Point(31, 67);
+            resources.ApplyResources(this.InfoLabel, "InfoLabel");
             this.InfoLabel.Name = "InfoLabel";
-            this.InfoLabel.Size = new System.Drawing.Size(76, 13);
-            this.InfoLabel.TabIndex = 8;
-            this.InfoLabel.Text = "Информация:";
             // 
             // labelTimeWork
             // 
-            this.labelTimeWork.AutoSize = true;
-            this.labelTimeWork.Location = new System.Drawing.Point(31, 89);
+            resources.ApplyResources(this.labelTimeWork, "labelTimeWork");
             this.labelTimeWork.Name = "labelTimeWork";
-            this.labelTimeWork.Size = new System.Drawing.Size(83, 13);
-            this.labelTimeWork.TabIndex = 9;
-            this.labelTimeWork.Text = "Время работы:";
             // 
-            // linkLabel1
+            // linkLabelUpdate
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(108, 450);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(72, 13);
-            this.linkLabel1.TabIndex = 11;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Обновления:";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            resources.ApplyResources(this.linkLabelUpdate, "linkLabelUpdate");
+            this.linkLabelUpdate.Name = "linkLabelUpdate";
+            this.linkLabelUpdate.TabStop = true;
+            this.linkLabelUpdate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // GetTempretureTimer
             // 
@@ -234,11 +197,8 @@
             // 
             // btSettings
             // 
-            this.btSettings.Location = new System.Drawing.Point(111, 424);
+            resources.ApplyResources(this.btSettings, "btSettings");
             this.btSettings.Name = "btSettings";
-            this.btSettings.Size = new System.Drawing.Size(190, 23);
-            this.btSettings.TabIndex = 12;
-            this.btSettings.Text = "Настройки";
             this.btSettings.UseVisualStyleBackColor = true;
             this.btSettings.Click += new System.EventHandler(this.BtnOpenSettingsFormClick);
             // 
@@ -262,30 +222,18 @@
             // 
             // InformationLabel
             // 
-            this.InformationLabel.AutoSize = true;
-            this.InformationLabel.Location = new System.Drawing.Point(114, 67);
+            resources.ApplyResources(this.InformationLabel, "InformationLabel");
             this.InformationLabel.Name = "InformationLabel";
-            this.InformationLabel.Size = new System.Drawing.Size(106, 13);
-            this.InformationLabel.TabIndex = 14;
-            this.InformationLabel.Text = "                                 ";
             // 
             // labelStatusTempMax
             // 
-            this.labelStatusTempMax.AutoSize = true;
-            this.labelStatusTempMax.Location = new System.Drawing.Point(158, 134);
+            resources.ApplyResources(this.labelStatusTempMax, "labelStatusTempMax");
             this.labelStatusTempMax.Name = "labelStatusTempMax";
-            this.labelStatusTempMax.Size = new System.Drawing.Size(49, 13);
-            this.labelStatusTempMax.TabIndex = 15;
-            this.labelStatusTempMax.Text = "              ";
             // 
             // labelTimeWork2
             // 
-            this.labelTimeWork2.AutoSize = true;
-            this.labelTimeWork2.Location = new System.Drawing.Point(134, 89);
+            resources.ApplyResources(this.labelTimeWork2, "labelTimeWork2");
             this.labelTimeWork2.Name = "labelTimeWork2";
-            this.labelTimeWork2.Size = new System.Drawing.Size(137, 13);
-            this.labelTimeWork2.TabIndex = 16;
-            this.labelTimeWork2.Text = "Дни: 0 Часы: 0 Минуты: 0";
             // 
             // GPUFanMaxTimer
             // 
@@ -301,21 +249,13 @@
             // 
             // labelCounterTempMax
             // 
-            this.labelCounterTempMax.AutoSize = true;
-            this.labelCounterTempMax.Location = new System.Drawing.Point(312, 134);
+            resources.ApplyResources(this.labelCounterTempMax, "labelCounterTempMax");
             this.labelCounterTempMax.Name = "labelCounterTempMax";
-            this.labelCounterTempMax.Size = new System.Drawing.Size(70, 13);
-            this.labelCounterTempMax.TabIndex = 17;
-            this.labelCounterTempMax.Text = "                     ";
             // 
             // labelTempMax
             // 
-            this.labelTempMax.AutoSize = true;
-            this.labelTempMax.Location = new System.Drawing.Point(32, 134);
+            resources.ApplyResources(this.labelTempMax, "labelTempMax");
             this.labelTempMax.Name = "labelTempMax";
-            this.labelTempMax.Size = new System.Drawing.Size(113, 13);
-            this.labelTempMax.TabIndex = 18;
-            this.labelTempMax.Text = "Событие TEMP MAX:";
             // 
             // SendDataTimer
             // 
@@ -325,111 +265,63 @@
             // 
             // labelFanMax
             // 
-            this.labelFanMax.AutoSize = true;
-            this.labelFanMax.Location = new System.Drawing.Point(32, 175);
+            resources.ApplyResources(this.labelFanMax, "labelFanMax");
             this.labelFanMax.Name = "labelFanMax";
-            this.labelFanMax.Size = new System.Drawing.Size(104, 13);
-            this.labelFanMax.TabIndex = 19;
-            this.labelFanMax.Text = "Событие FAN MAX:";
             // 
             // labelStatusTempMin
             // 
-            this.labelStatusTempMin.AutoSize = true;
-            this.labelStatusTempMin.Location = new System.Drawing.Point(158, 153);
+            resources.ApplyResources(this.labelStatusTempMin, "labelStatusTempMin");
             this.labelStatusTempMin.Name = "labelStatusTempMin";
-            this.labelStatusTempMin.Size = new System.Drawing.Size(40, 13);
-            this.labelStatusTempMin.TabIndex = 20;
-            this.labelStatusTempMin.Text = "           ";
             // 
             // labelCounterTempMin
             // 
-            this.labelCounterTempMin.AutoSize = true;
-            this.labelCounterTempMin.Location = new System.Drawing.Point(312, 153);
+            resources.ApplyResources(this.labelCounterTempMin, "labelCounterTempMin");
             this.labelCounterTempMin.Name = "labelCounterTempMin";
-            this.labelCounterTempMin.Size = new System.Drawing.Size(46, 13);
-            this.labelCounterTempMin.TabIndex = 21;
-            this.labelCounterTempMin.Text = "             ";
             // 
             // labelTempMin
             // 
-            this.labelTempMin.AutoSize = true;
-            this.labelTempMin.Location = new System.Drawing.Point(32, 153);
+            resources.ApplyResources(this.labelTempMin, "labelTempMin");
             this.labelTempMin.Name = "labelTempMin";
-            this.labelTempMin.Size = new System.Drawing.Size(110, 13);
-            this.labelTempMin.TabIndex = 22;
-            this.labelTempMin.Text = "Событие TEMP MIN:";
             // 
             // labelReloadFile
             // 
-            this.labelReloadFile.AutoSize = true;
-            this.labelReloadFile.Location = new System.Drawing.Point(32, 220);
+            resources.ApplyResources(this.labelReloadFile, "labelReloadFile");
             this.labelReloadFile.Name = "labelReloadFile";
-            this.labelReloadFile.Size = new System.Drawing.Size(126, 13);
-            this.labelReloadFile.TabIndex = 23;
-            this.labelReloadFile.Text = "Событие RELOAD FILE:";
             // 
             // labelStatusReloadFile
             // 
-            this.labelStatusReloadFile.AutoSize = true;
-            this.labelStatusReloadFile.Location = new System.Drawing.Point(158, 220);
+            resources.ApplyResources(this.labelStatusReloadFile, "labelStatusReloadFile");
             this.labelStatusReloadFile.Name = "labelStatusReloadFile";
-            this.labelStatusReloadFile.Size = new System.Drawing.Size(61, 13);
-            this.labelStatusReloadFile.TabIndex = 24;
-            this.labelStatusReloadFile.Text = "                  ";
             // 
             // labelCounterReloadFile
             // 
-            this.labelCounterReloadFile.AutoSize = true;
-            this.labelCounterReloadFile.Location = new System.Drawing.Point(312, 220);
+            resources.ApplyResources(this.labelCounterReloadFile, "labelCounterReloadFile");
             this.labelCounterReloadFile.Name = "labelCounterReloadFile";
-            this.labelCounterReloadFile.Size = new System.Drawing.Size(73, 13);
-            this.labelCounterReloadFile.TabIndex = 25;
-            this.labelCounterReloadFile.Text = "                      ";
             // 
             // labelFanMin
             // 
-            this.labelFanMin.AutoSize = true;
-            this.labelFanMin.Location = new System.Drawing.Point(32, 197);
+            resources.ApplyResources(this.labelFanMin, "labelFanMin");
             this.labelFanMin.Name = "labelFanMin";
-            this.labelFanMin.Size = new System.Drawing.Size(101, 13);
-            this.labelFanMin.TabIndex = 26;
-            this.labelFanMin.Text = "Событие FAN MIN:";
             // 
             // labelStatusFanMax
             // 
-            this.labelStatusFanMax.AutoSize = true;
-            this.labelStatusFanMax.Location = new System.Drawing.Point(158, 175);
+            resources.ApplyResources(this.labelStatusFanMax, "labelStatusFanMax");
             this.labelStatusFanMax.Name = "labelStatusFanMax";
-            this.labelStatusFanMax.Size = new System.Drawing.Size(43, 13);
-            this.labelStatusFanMax.TabIndex = 27;
-            this.labelStatusFanMax.Text = "            ";
             // 
             // labelCounterFanMax
             // 
-            this.labelCounterFanMax.AutoSize = true;
-            this.labelCounterFanMax.Location = new System.Drawing.Point(312, 175);
+            resources.ApplyResources(this.labelCounterFanMax, "labelCounterFanMax");
             this.labelCounterFanMax.Name = "labelCounterFanMax";
-            this.labelCounterFanMax.Size = new System.Drawing.Size(52, 13);
-            this.labelCounterFanMax.TabIndex = 28;
-            this.labelCounterFanMax.Text = "               ";
             // 
             // labelStatusFanMin
             // 
-            this.labelStatusFanMin.AutoSize = true;
-            this.labelStatusFanMin.Location = new System.Drawing.Point(158, 197);
+            resources.ApplyResources(this.labelStatusFanMin, "labelStatusFanMin");
             this.labelStatusFanMin.Name = "labelStatusFanMin";
-            this.labelStatusFanMin.Size = new System.Drawing.Size(49, 13);
-            this.labelStatusFanMin.TabIndex = 29;
-            this.labelStatusFanMin.Text = "              ";
             // 
             // labelCounterFanMin
             // 
-            this.labelCounterFanMin.AutoSize = true;
-            this.labelCounterFanMin.Location = new System.Drawing.Point(312, 197);
+            resources.ApplyResources(this.labelCounterFanMin, "labelCounterFanMin");
             this.labelCounterFanMin.Name = "labelCounterFanMin";
-            this.labelCounterFanMin.Size = new System.Drawing.Size(64, 13);
-            this.labelCounterFanMin.TabIndex = 30;
-            this.labelCounterFanMin.Text = "                   ";
             // 
             // GPUCoreMinTimer
             // 
@@ -445,57 +337,33 @@
             // 
             // labelClock
             // 
-            this.labelClock.AutoSize = true;
-            this.labelClock.Location = new System.Drawing.Point(32, 243);
+            resources.ApplyResources(this.labelClock, "labelClock");
             this.labelClock.Name = "labelClock";
-            this.labelClock.Size = new System.Drawing.Size(92, 13);
-            this.labelClock.TabIndex = 31;
-            this.labelClock.Text = "Событие CLOCK:";
             // 
             // labelMemory
             // 
-            this.labelMemory.AutoSize = true;
-            this.labelMemory.Location = new System.Drawing.Point(32, 264);
+            resources.ApplyResources(this.labelMemory, "labelMemory");
             this.labelMemory.Name = "labelMemory";
-            this.labelMemory.Size = new System.Drawing.Size(105, 13);
-            this.labelMemory.TabIndex = 32;
-            this.labelMemory.Text = "Событие MEMORY:";
             // 
             // labelStatusClock
             // 
-            this.labelStatusClock.AutoSize = true;
-            this.labelStatusClock.Location = new System.Drawing.Point(158, 243);
+            resources.ApplyResources(this.labelStatusClock, "labelStatusClock");
             this.labelStatusClock.Name = "labelStatusClock";
-            this.labelStatusClock.Size = new System.Drawing.Size(49, 13);
-            this.labelStatusClock.TabIndex = 33;
-            this.labelStatusClock.Text = "              ";
             // 
             // labelCounterClock
             // 
-            this.labelCounterClock.AutoSize = true;
-            this.labelCounterClock.Location = new System.Drawing.Point(312, 243);
+            resources.ApplyResources(this.labelCounterClock, "labelCounterClock");
             this.labelCounterClock.Name = "labelCounterClock";
-            this.labelCounterClock.Size = new System.Drawing.Size(67, 13);
-            this.labelCounterClock.TabIndex = 34;
-            this.labelCounterClock.Text = "                    ";
             // 
             // labelStatusMemory
             // 
-            this.labelStatusMemory.AutoSize = true;
-            this.labelStatusMemory.Location = new System.Drawing.Point(158, 264);
+            resources.ApplyResources(this.labelStatusMemory, "labelStatusMemory");
             this.labelStatusMemory.Name = "labelStatusMemory";
-            this.labelStatusMemory.Size = new System.Drawing.Size(79, 13);
-            this.labelStatusMemory.TabIndex = 35;
-            this.labelStatusMemory.Text = "                        ";
             // 
             // labelCounterMemory
             // 
-            this.labelCounterMemory.AutoSize = true;
-            this.labelCounterMemory.Location = new System.Drawing.Point(312, 264);
+            resources.ApplyResources(this.labelCounterMemory, "labelCounterMemory");
             this.labelCounterMemory.Name = "labelCounterMemory";
-            this.labelCounterMemory.Size = new System.Drawing.Size(64, 13);
-            this.labelCounterMemory.TabIndex = 36;
-            this.labelCounterMemory.Text = "                   ";
             // 
             // PingInternetTimer
             // 
@@ -506,21 +374,13 @@
             // 
             // labelInternetPing
             // 
-            this.labelInternetPing.AutoSize = true;
-            this.labelInternetPing.Location = new System.Drawing.Point(31, 111);
+            resources.ApplyResources(this.labelInternetPing, "labelInternetPing");
             this.labelInternetPing.Name = "labelInternetPing";
-            this.labelInternetPing.Size = new System.Drawing.Size(105, 13);
-            this.labelInternetPing.TabIndex = 37;
-            this.labelInternetPing.Text = "Доступ в интернет:";
             // 
             // labelStatusInternetPing
             // 
-            this.labelStatusInternetPing.AutoSize = true;
-            this.labelStatusInternetPing.Location = new System.Drawing.Point(159, 111);
+            resources.ApplyResources(this.labelStatusInternetPing, "labelStatusInternetPing");
             this.labelStatusInternetPing.Name = "labelStatusInternetPing";
-            this.labelStatusInternetPing.Size = new System.Drawing.Size(73, 13);
-            this.labelStatusInternetPing.TabIndex = 38;
-            this.labelStatusInternetPing.Text = "                      ";
             // 
             // DontHaveInternetTimer
             // 
@@ -535,84 +395,48 @@
             // 
             // labelFellOffGPU
             // 
-            this.labelFellOffGPU.AutoSize = true;
-            this.labelFellOffGPU.Location = new System.Drawing.Point(32, 306);
+            resources.ApplyResources(this.labelFellOffGPU, "labelFellOffGPU");
             this.labelFellOffGPU.Name = "labelFellOffGPU";
-            this.labelFellOffGPU.Size = new System.Drawing.Size(120, 13);
-            this.labelFellOffGPU.TabIndex = 39;
-            this.labelFellOffGPU.Text = "Событие отвал карты:";
             // 
             // labelStatusFellOffGPU
             // 
-            this.labelStatusFellOffGPU.AutoSize = true;
-            this.labelStatusFellOffGPU.Location = new System.Drawing.Point(158, 306);
+            resources.ApplyResources(this.labelStatusFellOffGPU, "labelStatusFellOffGPU");
             this.labelStatusFellOffGPU.Name = "labelStatusFellOffGPU";
-            this.labelStatusFellOffGPU.Size = new System.Drawing.Size(64, 13);
-            this.labelStatusFellOffGPU.TabIndex = 40;
-            this.labelStatusFellOffGPU.Text = "                   ";
             // 
             // labelCounerFellOff
             // 
-            this.labelCounerFellOff.AutoSize = true;
-            this.labelCounerFellOff.Location = new System.Drawing.Point(312, 306);
+            resources.ApplyResources(this.labelCounerFellOff, "labelCounerFellOff");
             this.labelCounerFellOff.Name = "labelCounerFellOff";
-            this.labelCounerFellOff.Size = new System.Drawing.Size(70, 13);
-            this.labelCounerFellOff.TabIndex = 41;
-            this.labelCounerFellOff.Text = "                     ";
             // 
             // labelInternet
             // 
-            this.labelInternet.AutoSize = true;
-            this.labelInternet.Location = new System.Drawing.Point(32, 327);
+            resources.ApplyResources(this.labelInternet, "labelInternet");
             this.labelInternet.Name = "labelInternet";
-            this.labelInternet.Size = new System.Drawing.Size(103, 13);
-            this.labelInternet.TabIndex = 42;
-            this.labelInternet.Text = "Событие интернет:";
             // 
             // labelStatusInternet
             // 
-            this.labelStatusInternet.AutoSize = true;
-            this.labelStatusInternet.Location = new System.Drawing.Point(158, 327);
+            resources.ApplyResources(this.labelStatusInternet, "labelStatusInternet");
             this.labelStatusInternet.Name = "labelStatusInternet";
-            this.labelStatusInternet.Size = new System.Drawing.Size(43, 13);
-            this.labelStatusInternet.TabIndex = 43;
-            this.labelStatusInternet.Text = "            ";
             // 
             // label3CounterInternet
             // 
-            this.label3CounterInternet.AutoSize = true;
-            this.label3CounterInternet.Location = new System.Drawing.Point(311, 327);
+            resources.ApplyResources(this.label3CounterInternet, "label3CounterInternet");
             this.label3CounterInternet.Name = "label3CounterInternet";
-            this.label3CounterInternet.Size = new System.Drawing.Size(73, 13);
-            this.label3CounterInternet.TabIndex = 44;
-            this.label3CounterInternet.Text = "                      ";
             // 
             // labelCounterLoadGPU
             // 
-            this.labelCounterLoadGPU.AutoSize = true;
-            this.labelCounterLoadGPU.Location = new System.Drawing.Point(312, 285);
+            resources.ApplyResources(this.labelCounterLoadGPU, "labelCounterLoadGPU");
             this.labelCounterLoadGPU.Name = "labelCounterLoadGPU";
-            this.labelCounterLoadGPU.Size = new System.Drawing.Size(64, 13);
-            this.labelCounterLoadGPU.TabIndex = 47;
-            this.labelCounterLoadGPU.Text = "                   ";
             // 
             // labelStatusLoadGPU
             // 
-            this.labelStatusLoadGPU.AutoSize = true;
-            this.labelStatusLoadGPU.Location = new System.Drawing.Point(158, 285);
+            resources.ApplyResources(this.labelStatusLoadGPU, "labelStatusLoadGPU");
             this.labelStatusLoadGPU.Name = "labelStatusLoadGPU";
-            this.labelStatusLoadGPU.Size = new System.Drawing.Size(79, 13);
-            this.labelStatusLoadGPU.TabIndex = 46;
-            this.labelStatusLoadGPU.Text = "                        ";
             // 
             // labelLoadGPU
             // 
-            this.labelLoadGPU.AutoSize = true;
-            this.labelLoadGPU.Location = new System.Drawing.Point(32, 285);
+            resources.ApplyResources(this.labelLoadGPU, "labelLoadGPU");
             this.labelLoadGPU.Name = "labelLoadGPU";
-            this.labelLoadGPU.Size = new System.Drawing.Size(112, 13);
-            this.labelLoadGPU.TabIndex = 45;
-            this.labelLoadGPU.Text = "Событие LOAD GPU:";
             // 
             // GPULoadMin
             // 
@@ -622,13 +446,8 @@
             // 
             // labelTest
             // 
-            this.labelTest.AutoSize = true;
-            this.labelTest.Location = new System.Drawing.Point(30, 433);
+            resources.ApplyResources(this.labelTest, "labelTest");
             this.labelTest.Name = "labelTest";
-            this.labelTest.Size = new System.Drawing.Size(50, 13);
-            this.labelTest.TabIndex = 48;
-            this.labelTest.Text = "labelTest";
-            this.labelTest.Visible = false;
             // 
             // GetEWBF_ZcashTimer
             // 
@@ -636,26 +455,40 @@
             // 
             // labelToken
             // 
-            this.labelToken.AutoSize = true;
-            this.labelToken.Location = new System.Drawing.Point(31, 43);
+            resources.ApplyResources(this.labelToken, "labelToken");
             this.labelToken.Name = "labelToken";
-            this.labelToken.Size = new System.Drawing.Size(41, 13);
-            this.labelToken.TabIndex = 49;
-            this.labelToken.Text = "Token:";
             // 
             // tbToken
             // 
-            this.tbToken.Location = new System.Drawing.Point(111, 38);
+            resources.ApplyResources(this.tbToken, "tbToken");
             this.tbToken.Name = "tbToken";
-            this.tbToken.Size = new System.Drawing.Size(218, 20);
-            this.tbToken.TabIndex = 50;
             this.tbToken.TextChanged += new System.EventHandler(this.tbToken_TextChanged);
+            // 
+            // btExit
+            // 
+            resources.ApplyResources(this.btExit, "btExit");
+            this.btExit.Name = "btExit";
+            this.btExit.UseVisualStyleBackColor = true;
+            this.btExit.Click += new System.EventHandler(this.BtnExitClick);
+            // 
+            // cbLocalize
+            // 
+            resources.ApplyResources(this.cbLocalize, "cbLocalize");
+            this.cbLocalize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLocalize.FormattingEnabled = true;
+            this.cbLocalize.Name = "cbLocalize";
+            // 
+            // notifyIcon1
+            // 
+            resources.ApplyResources(this.notifyIcon1, "notifyIcon1");
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(387, 473);
+            this.Controls.Add(this.cbLocalize);
+            this.Controls.Add(this.btExit);
             this.Controls.Add(this.tbToken);
             this.Controls.Add(this.labelToken);
             this.Controls.Add(this.labelTest);
@@ -694,7 +527,7 @@
             this.Controls.Add(this.labelStatusTempMax);
             this.Controls.Add(this.InformationLabel);
             this.Controls.Add(this.btSettings);
-            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.linkLabelUpdate);
             this.Controls.Add(this.labelTimeWork);
             this.Controls.Add(this.InfoLabel);
             this.Controls.Add(this.btStop);
@@ -706,11 +539,11 @@
             this.Controls.Add(this.tbSecret);
             this.Controls.Add(this.tbEmail);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Informer | Allminer.ru v1.3.6";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -728,7 +561,7 @@
         private System.Windows.Forms.Button btStop;
         private System.Windows.Forms.Label InfoLabel;
         private System.Windows.Forms.Label labelTimeWork;
-        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel linkLabelUpdate;
         private System.Windows.Forms.Timer GetTempretureTimer;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Timer AutoStartTimer;
@@ -785,6 +618,9 @@
         private System.Windows.Forms.Timer GetEWBF_ZcashTimer;
         private System.Windows.Forms.Label labelToken;
         private System.Windows.Forms.TextBox tbToken;
+        private System.Windows.Forms.Button btExit;
+        private System.Windows.Forms.ComboBox cbLocalize;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

@@ -67,6 +67,7 @@
             this.tbFanMaxSec = new System.Windows.Forms.TextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.checkBox21 = new System.Windows.Forms.CheckBox();
             this.cbClockMinGPU = new System.Windows.Forms.CheckBox();
             this.tbClockMin = new System.Windows.Forms.TextBox();
             this.tbClockMinSec = new System.Windows.Forms.TextBox();
@@ -85,11 +86,32 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.checkBox20 = new System.Windows.Forms.CheckBox();
             this.lbSecGPU = new System.Windows.Forms.Label();
             this.tbLoadGPUSec = new System.Windows.Forms.TextBox();
             this.tbLoadGPU = new System.Windows.Forms.TextBox();
             this.cbLoadGPU = new System.Windows.Forms.CheckBox();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.checkBox19 = new System.Windows.Forms.CheckBox();
+            this.checkBox18 = new System.Windows.Forms.CheckBox();
+            this.checkBox17 = new System.Windows.Forms.CheckBox();
+            this.checkBox16 = new System.Windows.Forms.CheckBox();
+            this.checkBox15 = new System.Windows.Forms.CheckBox();
+            this.checkBox14 = new System.Windows.Forms.CheckBox();
+            this.checkBox13 = new System.Windows.Forms.CheckBox();
+            this.checkBox12 = new System.Windows.Forms.CheckBox();
+            this.checkBox11 = new System.Windows.Forms.CheckBox();
+            this.checkBox10 = new System.Windows.Forms.CheckBox();
+            this.checkBox9 = new System.Windows.Forms.CheckBox();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -97,182 +119,130 @@
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // btSave
             // 
-            this.btSave.Location = new System.Drawing.Point(247, 508);
+            resources.ApplyResources(this.btSave, "btSave");
             this.btSave.Name = "btSave";
-            this.btSave.Size = new System.Drawing.Size(297, 45);
-            this.btSave.TabIndex = 3;
-            this.btSave.Text = "Сохранить";
             this.btSave.UseVisualStyleBackColor = true;
             this.btSave.Click += new System.EventHandler(this.BtSaveClick);
             // 
             // tbTempMin
             // 
-            this.tbTempMin.Location = new System.Drawing.Point(25, 82);
+            resources.ApplyResources(this.tbTempMin, "tbTempMin");
             this.tbTempMin.Name = "tbTempMin";
-            this.tbTempMin.Size = new System.Drawing.Size(42, 20);
-            this.tbTempMin.TabIndex = 5;
             this.tbTempMin.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbTempMin_KeyPress);
             // 
             // tbTempMax
             // 
-            this.tbTempMax.Location = new System.Drawing.Point(25, 33);
+            resources.ApplyResources(this.tbTempMax, "tbTempMax");
             this.tbTempMax.Name = "tbTempMax";
-            this.tbTempMax.Size = new System.Drawing.Size(42, 20);
-            this.tbTempMax.TabIndex = 14;
             this.tbTempMax.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbTempMax_KeyPress);
             // 
             // cbTempMaxGPU
             // 
-            this.cbTempMaxGPU.AutoSize = true;
-            this.cbTempMaxGPU.Location = new System.Drawing.Point(25, 6);
+            resources.ApplyResources(this.cbTempMaxGPU, "cbTempMaxGPU");
             this.cbTempMaxGPU.Name = "cbTempMaxGPU";
-            this.cbTempMaxGPU.Size = new System.Drawing.Size(357, 17);
-            this.cbTempMaxGPU.TabIndex = 15;
-            this.cbTempMaxGPU.Text = "Перезагрузка если максимальная температура выше или равно";
             this.cbTempMaxGPU.UseVisualStyleBackColor = true;
             this.cbTempMaxGPU.CheckedChanged += new System.EventHandler(this.CheckBoxTempMax_CheckedChanged);
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(132, 36);
+            resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(25, 13);
-            this.label6.TabIndex = 24;
-            this.label6.Text = "сек";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(132, 85);
+            resources.ApplyResources(this.label7, "label7");
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(25, 13);
-            this.label7.TabIndex = 25;
-            this.label7.Text = "сек";
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
             // 
             // btView1
             // 
-            this.btView1.Location = new System.Drawing.Point(22, 102);
+            resources.ApplyResources(this.btView1, "btView1");
             this.btView1.Name = "btView1";
-            this.btView1.Size = new System.Drawing.Size(75, 23);
-            this.btView1.TabIndex = 27;
-            this.btView1.Text = "Обзор";
             this.btView1.UseVisualStyleBackColor = true;
             this.btView1.Click += new System.EventHandler(this.buttonView1_Click);
             // 
             // tbPath1
             // 
-            this.tbPath1.Location = new System.Drawing.Point(104, 104);
+            resources.ApplyResources(this.tbPath1, "tbPath1");
             this.tbPath1.Name = "tbPath1";
             this.tbPath1.ReadOnly = true;
-            this.tbPath1.Size = new System.Drawing.Size(240, 20);
-            this.tbPath1.TabIndex = 28;
             // 
             // cbReloadFile
             // 
-            this.cbReloadFile.AutoSize = true;
-            this.cbReloadFile.Location = new System.Drawing.Point(25, 3);
+            resources.ApplyResources(this.cbReloadFile, "cbReloadFile");
             this.cbReloadFile.Name = "cbReloadFile";
-            this.cbReloadFile.Size = new System.Drawing.Size(133, 17);
-            this.cbReloadFile.TabIndex = 29;
-            this.cbReloadFile.Text = "Перезапускать фаил";
             this.cbReloadFile.UseVisualStyleBackColor = true;
             this.cbReloadFile.CheckedChanged += new System.EventHandler(this.CheckBoxReloadFile_CheckedChanged);
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
+            resources.ApplyResources(this.label9, "label9");
             this.label9.ForeColor = System.Drawing.Color.Red;
-            this.label9.Location = new System.Drawing.Point(58, 23);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(275, 13);
-            this.label9.TabIndex = 30;
-            this.label9.Text = "ВНИМАНИЕ! ЗАКРОЕТ ВСЕ КОМАНДНЫЕ СТРОКИ!";
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(19, 36);
+            resources.ApplyResources(this.label10, "label10");
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(256, 13);
-            this.label10.TabIndex = 31;
-            this.label10.Text = "Если минимальная температура ниже или равно";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // tbReloadTempFile
             // 
-            this.tbReloadTempFile.Location = new System.Drawing.Point(26, 56);
+            resources.ApplyResources(this.tbReloadTempFile, "tbReloadTempFile");
             this.tbReloadTempFile.Name = "tbReloadTempFile";
-            this.tbReloadTempFile.Size = new System.Drawing.Size(42, 20);
-            this.tbReloadTempFile.TabIndex = 33;
             this.tbReloadTempFile.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbReloadTempFile_KeyPress);
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(132, 63);
+            resources.ApplyResources(this.label11, "label11");
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(25, 13);
-            this.label11.TabIndex = 34;
-            this.label11.Text = "сек";
             // 
             // cbTempMinGPU
             // 
-            this.cbTempMinGPU.AutoSize = true;
-            this.cbTempMinGPU.Location = new System.Drawing.Point(25, 59);
+            resources.ApplyResources(this.cbTempMinGPU, "cbTempMinGPU");
             this.cbTempMinGPU.Name = "cbTempMinGPU";
-            this.cbTempMinGPU.Size = new System.Drawing.Size(349, 17);
-            this.cbTempMinGPU.TabIndex = 35;
-            this.cbTempMinGPU.Text = "Перезагрузка если минимальная температура ниже или равно";
             this.cbTempMinGPU.UseVisualStyleBackColor = true;
             this.cbTempMinGPU.CheckedChanged += new System.EventHandler(this.CheckBoxTempMin_CheckedChanged);
             // 
             // combTimeStart
             // 
+            resources.ApplyResources(this.combTimeStart, "combTimeStart");
             this.combTimeStart.DisplayMember = "1";
             this.combTimeStart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combTimeStart.FormattingEnabled = true;
             this.combTimeStart.Items.AddRange(new object[] {
-            "10",
-            "30",
-            "60",
-            "120",
-            "180",
-            "240",
-            "300"});
-            this.combTimeStart.Location = new System.Drawing.Point(162, 4);
+            resources.GetString("combTimeStart.Items"),
+            resources.GetString("combTimeStart.Items1"),
+            resources.GetString("combTimeStart.Items2"),
+            resources.GetString("combTimeStart.Items3"),
+            resources.GetString("combTimeStart.Items4"),
+            resources.GetString("combTimeStart.Items5"),
+            resources.GetString("combTimeStart.Items6")});
             this.combTimeStart.Name = "combTimeStart";
-            this.combTimeStart.Size = new System.Drawing.Size(68, 21);
-            this.combTimeStart.TabIndex = 36;
             this.combTimeStart.SelectedIndexChanged += new System.EventHandler(this.combTimeStart_SelectedIndexChanged_1);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(252, 7);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
-            this.label1.TabIndex = 37;
-            this.label1.Text = "секунд";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 7);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(137, 13);
-            this.label2.TabIndex = 38;
-            this.label2.Text = "Запуск программы через";
             // 
             // panel1
             // 
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel1.Controls.Add(this.tbPath2);
             this.panel1.Controls.Add(this.label8);
@@ -286,57 +256,40 @@
             this.panel1.Controls.Add(this.cbReloadFile);
             this.panel1.Controls.Add(this.tbPath1);
             this.panel1.Controls.Add(this.btView1);
-            this.panel1.Location = new System.Drawing.Point(12, 265);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(385, 183);
-            this.panel1.TabIndex = 39;
             // 
             // tbPath2
             // 
-            this.tbPath2.Location = new System.Drawing.Point(104, 146);
+            resources.ApplyResources(this.tbPath2, "tbPath2");
             this.tbPath2.Name = "tbPath2";
             this.tbPath2.ReadOnly = true;
-            this.tbPath2.Size = new System.Drawing.Size(240, 20);
-            this.tbPath2.TabIndex = 39;
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(22, 128);
+            resources.ApplyResources(this.label8, "label8");
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(175, 13);
-            this.label8.TabIndex = 38;
-            this.label8.Text = "Путь для перезапуска бат файла";
             // 
             // btView2
             // 
-            this.btView2.Location = new System.Drawing.Point(22, 144);
+            resources.ApplyResources(this.btView2, "btView2");
             this.btView2.Name = "btView2";
-            this.btView2.Size = new System.Drawing.Size(75, 23);
-            this.btView2.TabIndex = 37;
-            this.btView2.Text = "Обзор";
             this.btView2.UseVisualStyleBackColor = true;
             this.btView2.Click += new System.EventHandler(this.buttonView2_Click);
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(22, 86);
+            resources.ApplyResources(this.label5, "label5");
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(151, 13);
-            this.label5.TabIndex = 36;
-            this.label5.Text = "Путь для закрытия майнера";
             // 
             // tbReloadFileSec
             // 
-            this.tbReloadFileSec.Location = new System.Drawing.Point(79, 56);
+            resources.ApplyResources(this.tbReloadFileSec, "tbReloadFileSec");
             this.tbReloadFileSec.Name = "tbReloadFileSec";
-            this.tbReloadFileSec.Size = new System.Drawing.Size(51, 20);
-            this.tbReloadFileSec.TabIndex = 35;
             this.tbReloadFileSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbReloadFileSec_KeyPress);
             // 
             // panel2
             // 
+            resources.ApplyResources(this.panel2, "panel2");
             this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel2.Controls.Add(this.tbTempMinSec);
             this.panel2.Controls.Add(this.tbTempMaxSec);
@@ -346,85 +299,59 @@
             this.panel2.Controls.Add(this.cbTempMaxGPU);
             this.panel2.Controls.Add(this.tbTempMax);
             this.panel2.Controls.Add(this.tbTempMin);
-            this.panel2.Location = new System.Drawing.Point(12, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(385, 116);
-            this.panel2.TabIndex = 40;
             // 
             // tbTempMinSec
             // 
-            this.tbTempMinSec.Location = new System.Drawing.Point(79, 82);
+            resources.ApplyResources(this.tbTempMinSec, "tbTempMinSec");
             this.tbTempMinSec.Name = "tbTempMinSec";
-            this.tbTempMinSec.Size = new System.Drawing.Size(47, 20);
-            this.tbTempMinSec.TabIndex = 37;
             this.tbTempMinSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbTempMinSec_KeyPress);
             // 
             // tbTempMaxSec
             // 
-            this.tbTempMaxSec.Location = new System.Drawing.Point(79, 33);
+            resources.ApplyResources(this.tbTempMaxSec, "tbTempMaxSec");
             this.tbTempMaxSec.Name = "tbTempMaxSec";
-            this.tbTempMaxSec.Size = new System.Drawing.Size(47, 20);
-            this.tbTempMaxSec.TabIndex = 36;
             this.tbTempMaxSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbTempMaxSec_KeyPress);
             // 
             // chFanMaxGPU
             // 
-            this.chFanMaxGPU.AutoSize = true;
-            this.chFanMaxGPU.Location = new System.Drawing.Point(22, 8);
+            resources.ApplyResources(this.chFanMaxGPU, "chFanMaxGPU");
             this.chFanMaxGPU.Name = "chFanMaxGPU";
-            this.chFanMaxGPU.Size = new System.Drawing.Size(358, 17);
-            this.chFanMaxGPU.TabIndex = 41;
-            this.chFanMaxGPU.Text = "Перезагрузка если максимальные обороты Fan выше или равно";
             this.chFanMaxGPU.UseVisualStyleBackColor = true;
             this.chFanMaxGPU.CheckedChanged += new System.EventHandler(this.CheckBoxFanMax_CheckedChanged);
             // 
             // tbFanMax
             // 
-            this.tbFanMax.Location = new System.Drawing.Point(21, 31);
+            resources.ApplyResources(this.tbFanMax, "tbFanMax");
             this.tbFanMax.Name = "tbFanMax";
-            this.tbFanMax.Size = new System.Drawing.Size(46, 20);
-            this.tbFanMax.TabIndex = 42;
             this.tbFanMax.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFanMax_KeyPress);
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(132, 38);
+            resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(25, 13);
-            this.label3.TabIndex = 44;
-            this.label3.Text = "сек";
             // 
             // cbFanMinGPU
             // 
-            this.cbFanMinGPU.AutoSize = true;
-            this.cbFanMinGPU.Location = new System.Drawing.Point(21, 57);
+            resources.ApplyResources(this.cbFanMinGPU, "cbFanMinGPU");
             this.cbFanMinGPU.Name = "cbFanMinGPU";
-            this.cbFanMinGPU.Size = new System.Drawing.Size(350, 17);
-            this.cbFanMinGPU.TabIndex = 45;
-            this.cbFanMinGPU.Text = "Перезагрузка если минимальные обороты Fan ниже или равно";
             this.cbFanMinGPU.UseVisualStyleBackColor = true;
             this.cbFanMinGPU.CheckedChanged += new System.EventHandler(this.CheckBoxFanMin_CheckedChanged);
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(132, 87);
+            resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(25, 13);
-            this.label4.TabIndex = 47;
-            this.label4.Text = "сек";
             // 
             // tbFanMin
             // 
-            this.tbFanMin.Location = new System.Drawing.Point(22, 80);
+            resources.ApplyResources(this.tbFanMin, "tbFanMin");
             this.tbFanMin.Name = "tbFanMin";
-            this.tbFanMin.Size = new System.Drawing.Size(46, 20);
-            this.tbFanMin.TabIndex = 48;
             this.tbFanMin.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFanMin_KeyPress);
             // 
             // panel3
             // 
+            resources.ApplyResources(this.panel3, "panel3");
             this.panel3.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel3.Controls.Add(this.tbFanMinSec);
             this.panel3.Controls.Add(this.tbFanMaxSec);
@@ -434,91 +361,77 @@
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.tbFanMax);
             this.panel3.Controls.Add(this.chFanMaxGPU);
-            this.panel3.Location = new System.Drawing.Point(12, 124);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(385, 135);
-            this.panel3.TabIndex = 49;
             // 
             // tbFanMinSec
             // 
-            this.tbFanMinSec.Location = new System.Drawing.Point(79, 80);
+            resources.ApplyResources(this.tbFanMinSec, "tbFanMinSec");
             this.tbFanMinSec.Name = "tbFanMinSec";
-            this.tbFanMinSec.Size = new System.Drawing.Size(47, 20);
-            this.tbFanMinSec.TabIndex = 50;
             this.tbFanMinSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFanMinSec_KeyPress);
             // 
             // tbFanMaxSec
             // 
-            this.tbFanMaxSec.Location = new System.Drawing.Point(79, 31);
+            resources.ApplyResources(this.tbFanMaxSec, "tbFanMaxSec");
             this.tbFanMaxSec.Name = "tbFanMaxSec";
-            this.tbFanMaxSec.Size = new System.Drawing.Size(47, 20);
-            this.tbFanMaxSec.TabIndex = 49;
             this.tbFanMaxSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFanMaxSec_KeyPress);
             // 
             // openFileDialog2
             // 
             this.openFileDialog2.FileName = "openFileDialog2";
+            resources.ApplyResources(this.openFileDialog2, "openFileDialog2");
             // 
             // panel4
             // 
+            resources.ApplyResources(this.panel4, "panel4");
             this.panel4.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel4.Controls.Add(this.checkBox21);
             this.panel4.Controls.Add(this.label2);
             this.panel4.Controls.Add(this.label1);
             this.panel4.Controls.Add(this.combTimeStart);
-            this.panel4.Location = new System.Drawing.Point(205, 458);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(381, 44);
-            this.panel4.TabIndex = 50;
+            // 
+            // checkBox21
+            // 
+            resources.ApplyResources(this.checkBox21, "checkBox21");
+            this.checkBox21.Checked = true;
+            this.checkBox21.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox21.Name = "checkBox21";
+            this.checkBox21.UseVisualStyleBackColor = true;
             // 
             // cbClockMinGPU
             // 
-            this.cbClockMinGPU.AutoSize = true;
-            this.cbClockMinGPU.Location = new System.Drawing.Point(25, 6);
+            resources.ApplyResources(this.cbClockMinGPU, "cbClockMinGPU");
             this.cbClockMinGPU.Name = "cbClockMinGPU";
-            this.cbClockMinGPU.Size = new System.Drawing.Size(273, 17);
-            this.cbClockMinGPU.TabIndex = 51;
-            this.cbClockMinGPU.Text = "Перезагрузка если частота ядра (Clock) меньше";
             this.cbClockMinGPU.UseVisualStyleBackColor = true;
             this.cbClockMinGPU.CheckedChanged += new System.EventHandler(this.CheckBoxClockMin_CheckedChanged);
             // 
             // tbClockMin
             // 
-            this.tbClockMin.Location = new System.Drawing.Point(24, 33);
+            resources.ApplyResources(this.tbClockMin, "tbClockMin");
             this.tbClockMin.Name = "tbClockMin";
-            this.tbClockMin.Size = new System.Drawing.Size(45, 20);
-            this.tbClockMin.TabIndex = 52;
             this.tbClockMin.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbClockMin_KeyPress);
             // 
             // tbClockMinSec
             // 
-            this.tbClockMinSec.Location = new System.Drawing.Point(79, 33);
+            resources.ApplyResources(this.tbClockMinSec, "tbClockMinSec");
             this.tbClockMinSec.Name = "tbClockMinSec";
-            this.tbClockMinSec.Size = new System.Drawing.Size(46, 20);
-            this.tbClockMinSec.TabIndex = 53;
             this.tbClockMinSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbClockMinSec_KeyPress);
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(131, 40);
+            resources.ApplyResources(this.label12, "label12");
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(25, 13);
-            this.label12.TabIndex = 54;
-            this.label12.Text = "сек";
             // 
             // cbMemoryMinGPU
             // 
-            this.cbMemoryMinGPU.AutoSize = true;
-            this.cbMemoryMinGPU.Location = new System.Drawing.Point(24, 59);
+            resources.ApplyResources(this.cbMemoryMinGPU, "cbMemoryMinGPU");
             this.cbMemoryMinGPU.Name = "cbMemoryMinGPU";
-            this.cbMemoryMinGPU.Size = new System.Drawing.Size(296, 17);
-            this.cbMemoryMinGPU.TabIndex = 55;
-            this.cbMemoryMinGPU.Text = "Перезагрузка если частота памяти (Memory) меньше";
             this.cbMemoryMinGPU.UseVisualStyleBackColor = true;
             this.cbMemoryMinGPU.CheckedChanged += new System.EventHandler(this.CheckBoxMemory_CheckedChanged);
             // 
             // panel5
             // 
+            resources.ApplyResources(this.panel5, "panel5");
             this.panel5.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel5.Controls.Add(this.label13);
             this.panel5.Controls.Add(this.tbMemoryMinSec);
@@ -528,112 +441,77 @@
             this.panel5.Controls.Add(this.tbClockMinSec);
             this.panel5.Controls.Add(this.tbClockMin);
             this.panel5.Controls.Add(this.cbClockMinGPU);
-            this.panel5.Location = new System.Drawing.Point(412, 2);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(349, 116);
-            this.panel5.TabIndex = 56;
             // 
             // label13
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(131, 89);
+            resources.ApplyResources(this.label13, "label13");
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(25, 13);
-            this.label13.TabIndex = 58;
-            this.label13.Text = "сек";
             // 
             // tbMemoryMinSec
             // 
-            this.tbMemoryMinSec.Location = new System.Drawing.Point(79, 82);
+            resources.ApplyResources(this.tbMemoryMinSec, "tbMemoryMinSec");
             this.tbMemoryMinSec.Name = "tbMemoryMinSec";
-            this.tbMemoryMinSec.Size = new System.Drawing.Size(46, 20);
-            this.tbMemoryMinSec.TabIndex = 57;
             this.tbMemoryMinSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbMemoryMinSec_KeyPress);
             // 
             // tbMemoryMin
             // 
-            this.tbMemoryMin.Location = new System.Drawing.Point(24, 82);
+            resources.ApplyResources(this.tbMemoryMin, "tbMemoryMin");
             this.tbMemoryMin.Name = "tbMemoryMin";
-            this.tbMemoryMin.Size = new System.Drawing.Size(45, 20);
-            this.tbMemoryMin.TabIndex = 56;
             this.tbMemoryMin.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbMemoryMin_KeyPress);
             // 
             // cbInternetOff
             // 
-            this.cbInternetOff.AutoSize = true;
-            this.cbInternetOff.Location = new System.Drawing.Point(23, 4);
+            resources.ApplyResources(this.cbInternetOff, "cbInternetOff");
             this.cbInternetOff.Name = "cbInternetOff";
-            this.cbInternetOff.Size = new System.Drawing.Size(202, 17);
-            this.cbInternetOff.TabIndex = 57;
-            this.cbInternetOff.Text = "Перезагрузка если нет Интернета";
             this.cbInternetOff.UseVisualStyleBackColor = true;
             this.cbInternetOff.CheckedChanged += new System.EventHandler(this.CheckBoxInternetOff_CheckedChanged);
             // 
             // tbInternetOffSec
             // 
-            this.tbInternetOffSec.Location = new System.Drawing.Point(23, 30);
+            resources.ApplyResources(this.tbInternetOffSec, "tbInternetOffSec");
             this.tbInternetOffSec.Name = "tbInternetOffSec";
-            this.tbInternetOffSec.Size = new System.Drawing.Size(45, 20);
-            this.tbInternetOffSec.TabIndex = 58;
             this.tbInternetOffSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbInternetOffSec_KeyPress);
             // 
             // label14
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(74, 37);
+            resources.ApplyResources(this.label14, "label14");
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(25, 13);
-            this.label14.TabIndex = 59;
-            this.label14.Text = "сек";
             // 
             // cbFellOffGPU
             // 
-            this.cbFellOffGPU.AutoSize = true;
-            this.cbFellOffGPU.Location = new System.Drawing.Point(23, 4);
+            resources.ApplyResources(this.cbFellOffGPU, "cbFellOffGPU");
             this.cbFellOffGPU.Name = "cbFellOffGPU";
-            this.cbFellOffGPU.Size = new System.Drawing.Size(163, 17);
-            this.cbFellOffGPU.TabIndex = 60;
-            this.cbFellOffGPU.Text = "Следить за отвалом карты";
             this.cbFellOffGPU.UseVisualStyleBackColor = true;
             this.cbFellOffGPU.CheckedChanged += new System.EventHandler(this.CheckBoxFellOff_CheckedChanged);
             // 
             // tbCountGPU
             // 
-            this.tbCountGPU.Location = new System.Drawing.Point(23, 51);
+            resources.ApplyResources(this.tbCountGPU, "tbCountGPU");
             this.tbCountGPU.Name = "tbCountGPU";
-            this.tbCountGPU.Size = new System.Drawing.Size(45, 20);
-            this.tbCountGPU.TabIndex = 61;
             this.tbCountGPU.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbCountGPU_KeyPress);
             // 
             // tbCountGPUSec
             // 
-            this.tbCountGPUSec.Location = new System.Drawing.Point(79, 51);
+            resources.ApplyResources(this.tbCountGPUSec, "tbCountGPUSec");
             this.tbCountGPUSec.Name = "tbCountGPUSec";
-            this.tbCountGPUSec.Size = new System.Drawing.Size(46, 20);
-            this.tbCountGPUSec.TabIndex = 62;
             this.tbCountGPUSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbCountGPUSec_KeyPress);
             // 
             // label15
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(131, 58);
+            resources.ApplyResources(this.label15, "label15");
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(25, 13);
-            this.label15.TabIndex = 63;
-            this.label15.Text = "сек";
             // 
             // label16
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(20, 30);
+            resources.ApplyResources(this.label16, "label16");
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(177, 13);
-            this.label16.TabIndex = 64;
-            this.label16.Text = "Укажите количество карт в риге:";
             // 
             // panel6
             // 
+            resources.ApplyResources(this.panel6, "panel6");
             this.panel6.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel6.Controls.Add(this.checkBox20);
             this.panel6.Controls.Add(this.lbSecGPU);
             this.panel6.Controls.Add(this.tbLoadGPUSec);
             this.panel6.Controls.Add(this.tbLoadGPU);
@@ -643,64 +521,196 @@
             this.panel6.Controls.Add(this.tbCountGPUSec);
             this.panel6.Controls.Add(this.tbCountGPU);
             this.panel6.Controls.Add(this.cbFellOffGPU);
-            this.panel6.Location = new System.Drawing.Point(412, 124);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(347, 135);
-            this.panel6.TabIndex = 65;
+            this.panel6.Tag = "Если отмечено, Allminer запуcтит On";
+            // 
+            // checkBox20
+            // 
+            resources.ApplyResources(this.checkBox20, "checkBox20");
+            this.checkBox20.Name = "checkBox20";
+            this.checkBox20.Tag = "Если отмечено, Allminer запустит OnGPUsLost.bat при потере хотя бы одного устройс" +
+    "тва CUDA GPU, по умолчанию скрипт должен перезапускать всю систему.";
+            this.checkBox20.UseVisualStyleBackColor = true;
             // 
             // lbSecGPU
             // 
-            this.lbSecGPU.AutoSize = true;
-            this.lbSecGPU.Location = new System.Drawing.Point(131, 109);
+            resources.ApplyResources(this.lbSecGPU, "lbSecGPU");
             this.lbSecGPU.Name = "lbSecGPU";
-            this.lbSecGPU.Size = new System.Drawing.Size(25, 13);
-            this.lbSecGPU.TabIndex = 68;
-            this.lbSecGPU.Text = "сек";
             // 
             // tbLoadGPUSec
             // 
-            this.tbLoadGPUSec.Location = new System.Drawing.Point(79, 102);
+            resources.ApplyResources(this.tbLoadGPUSec, "tbLoadGPUSec");
             this.tbLoadGPUSec.Name = "tbLoadGPUSec";
-            this.tbLoadGPUSec.Size = new System.Drawing.Size(47, 20);
-            this.tbLoadGPUSec.TabIndex = 67;
             this.tbLoadGPUSec.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbLoadGPUSec_KeyPress);
             // 
             // tbLoadGPU
             // 
-            this.tbLoadGPU.Location = new System.Drawing.Point(23, 102);
+            resources.ApplyResources(this.tbLoadGPU, "tbLoadGPU");
             this.tbLoadGPU.Name = "tbLoadGPU";
-            this.tbLoadGPU.Size = new System.Drawing.Size(46, 20);
-            this.tbLoadGPU.TabIndex = 66;
             this.tbLoadGPU.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbLoadGPU_KeyPress);
             // 
             // cbLoadGPU
             // 
-            this.cbLoadGPU.AutoSize = true;
-            this.cbLoadGPU.Location = new System.Drawing.Point(23, 78);
+            resources.ApplyResources(this.cbLoadGPU, "cbLoadGPU");
             this.cbLoadGPU.Name = "cbLoadGPU";
-            this.cbLoadGPU.Size = new System.Drawing.Size(304, 17);
-            this.cbLoadGPU.TabIndex = 65;
-            this.cbLoadGPU.Text = "Перезагружать если загрузка GPU меньше или равно";
             this.cbLoadGPU.UseVisualStyleBackColor = true;
             this.cbLoadGPU.CheckedChanged += new System.EventHandler(this.cbLoadGPU_CheckedChanged);
             // 
             // panel7
             // 
+            resources.ApplyResources(this.panel7, "panel7");
             this.panel7.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel7.Controls.Add(this.cbInternetOff);
             this.panel7.Controls.Add(this.tbInternetOffSec);
             this.panel7.Controls.Add(this.label14);
-            this.panel7.Location = new System.Drawing.Point(412, 268);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(347, 73);
-            this.panel7.TabIndex = 66;
+            // 
+            // panel8
+            // 
+            resources.ApplyResources(this.panel8, "panel8");
+            this.panel8.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel8.Controls.Add(this.checkBox19);
+            this.panel8.Controls.Add(this.checkBox18);
+            this.panel8.Controls.Add(this.checkBox17);
+            this.panel8.Controls.Add(this.checkBox16);
+            this.panel8.Controls.Add(this.checkBox15);
+            this.panel8.Controls.Add(this.checkBox14);
+            this.panel8.Controls.Add(this.checkBox13);
+            this.panel8.Controls.Add(this.checkBox12);
+            this.panel8.Controls.Add(this.checkBox11);
+            this.panel8.Controls.Add(this.checkBox10);
+            this.panel8.Controls.Add(this.checkBox9);
+            this.panel8.Controls.Add(this.checkBox8);
+            this.panel8.Controls.Add(this.checkBox7);
+            this.panel8.Controls.Add(this.checkBox6);
+            this.panel8.Controls.Add(this.checkBox5);
+            this.panel8.Controls.Add(this.checkBox4);
+            this.panel8.Controls.Add(this.checkBox3);
+            this.panel8.Controls.Add(this.checkBox2);
+            this.panel8.Controls.Add(this.checkBox1);
+            this.panel8.Name = "panel8";
+            // 
+            // checkBox19
+            // 
+            resources.ApplyResources(this.checkBox19, "checkBox19");
+            this.checkBox19.Name = "checkBox19";
+            this.checkBox19.UseVisualStyleBackColor = true;
+            // 
+            // checkBox18
+            // 
+            resources.ApplyResources(this.checkBox18, "checkBox18");
+            this.checkBox18.Name = "checkBox18";
+            this.checkBox18.UseVisualStyleBackColor = true;
+            // 
+            // checkBox17
+            // 
+            resources.ApplyResources(this.checkBox17, "checkBox17");
+            this.checkBox17.Name = "checkBox17";
+            this.checkBox17.UseVisualStyleBackColor = true;
+            // 
+            // checkBox16
+            // 
+            resources.ApplyResources(this.checkBox16, "checkBox16");
+            this.checkBox16.Name = "checkBox16";
+            this.checkBox16.UseVisualStyleBackColor = true;
+            // 
+            // checkBox15
+            // 
+            resources.ApplyResources(this.checkBox15, "checkBox15");
+            this.checkBox15.Name = "checkBox15";
+            this.checkBox15.UseVisualStyleBackColor = true;
+            // 
+            // checkBox14
+            // 
+            resources.ApplyResources(this.checkBox14, "checkBox14");
+            this.checkBox14.Name = "checkBox14";
+            this.checkBox14.UseVisualStyleBackColor = true;
+            // 
+            // checkBox13
+            // 
+            resources.ApplyResources(this.checkBox13, "checkBox13");
+            this.checkBox13.Name = "checkBox13";
+            this.checkBox13.UseVisualStyleBackColor = true;
+            // 
+            // checkBox12
+            // 
+            resources.ApplyResources(this.checkBox12, "checkBox12");
+            this.checkBox12.Name = "checkBox12";
+            this.checkBox12.UseVisualStyleBackColor = true;
+            // 
+            // checkBox11
+            // 
+            resources.ApplyResources(this.checkBox11, "checkBox11");
+            this.checkBox11.Name = "checkBox11";
+            this.checkBox11.UseVisualStyleBackColor = true;
+            // 
+            // checkBox10
+            // 
+            resources.ApplyResources(this.checkBox10, "checkBox10");
+            this.checkBox10.Name = "checkBox10";
+            this.checkBox10.UseVisualStyleBackColor = true;
+            // 
+            // checkBox9
+            // 
+            resources.ApplyResources(this.checkBox9, "checkBox9");
+            this.checkBox9.Name = "checkBox9";
+            this.checkBox9.UseVisualStyleBackColor = true;
+            // 
+            // checkBox8
+            // 
+            resources.ApplyResources(this.checkBox8, "checkBox8");
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.UseVisualStyleBackColor = true;
+            // 
+            // checkBox7
+            // 
+            resources.ApplyResources(this.checkBox7, "checkBox7");
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.UseVisualStyleBackColor = true;
+            // 
+            // checkBox6
+            // 
+            resources.ApplyResources(this.checkBox6, "checkBox6");
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.UseVisualStyleBackColor = true;
+            // 
+            // checkBox5
+            // 
+            resources.ApplyResources(this.checkBox5, "checkBox5");
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox4
+            // 
+            resources.ApplyResources(this.checkBox4, "checkBox4");
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            resources.ApplyResources(this.checkBox3, "checkBox3");
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            resources.ApplyResources(this.checkBox2, "checkBox2");
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            resources.ApplyResources(this.checkBox1, "checkBox1");
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(778, 565);
+            this.Controls.Add(this.panel8);
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.panel6);
             this.Controls.Add(this.panel5);
@@ -710,9 +720,9 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btSave);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SettingsForm";
-            this.Text = "Настройки";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -727,6 +737,8 @@
             this.panel6.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -793,5 +805,27 @@
         private System.Windows.Forms.TextBox tbLoadGPU;
         private System.Windows.Forms.CheckBox cbLoadGPU;
         private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.CheckBox checkBox19;
+        private System.Windows.Forms.CheckBox checkBox18;
+        private System.Windows.Forms.CheckBox checkBox17;
+        private System.Windows.Forms.CheckBox checkBox16;
+        private System.Windows.Forms.CheckBox checkBox15;
+        private System.Windows.Forms.CheckBox checkBox14;
+        private System.Windows.Forms.CheckBox checkBox13;
+        private System.Windows.Forms.CheckBox checkBox12;
+        private System.Windows.Forms.CheckBox checkBox11;
+        private System.Windows.Forms.CheckBox checkBox10;
+        private System.Windows.Forms.CheckBox checkBox9;
+        private System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox20;
+        private System.Windows.Forms.CheckBox checkBox21;
     }
 }

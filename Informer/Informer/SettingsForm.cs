@@ -105,6 +105,7 @@ namespace Informer
                 
 
                 ZeroingOut();
+
                 this.Close();
             }
             catch (Exception ex)
@@ -706,6 +707,11 @@ namespace Informer
             int.TryParse(combTimeStart.GetItemText(combTimeStart.SelectedItem), out GlobalVars.time_start);
             ZeroingOut();
            
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void tbInternetOffSec_KeyPress(object sender, KeyPressEventArgs e)

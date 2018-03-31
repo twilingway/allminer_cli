@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -8,6 +7,7 @@ using System.IO.Compression;
 using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Net;
 
 namespace launcher_informer
 {
@@ -26,7 +26,7 @@ namespace launcher_informer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            update();
+          //  update();
 
         }
         public void update()
@@ -41,6 +41,7 @@ namespace launcher_informer
                 string ver = m.version;
                 GlobalVars.version = m.version;
                 GlobalVars.link = m.source;
+               
                 if (v == ver)
                 {
                     //MessageBox.Show("У Вас старая версия");
@@ -59,6 +60,10 @@ namespace launcher_informer
                     psiw = Process.Start("cmd", @"/c taskkill /f /im informer.exe");
                     psiw.Close();
                     download(GlobalVars.link);
+
+                    
+
+
                 }
 
             }
@@ -68,6 +73,9 @@ namespace launcher_informer
                 Log.writeLogLine(ex.Message + " fun update");
             }
         }
+
+
+        
         public void download(string link)
         {
             try
@@ -80,15 +88,22 @@ namespace launcher_informer
                 {
                     File.Delete(filename2);
                     label1.Text = "Файл удален";
+                    
+                  
+                   
                     WebClient wc = new WebClient();
-                    wc.DownloadFileAsync(uri3, filename2);
-                    wc.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
+                 
+                       wc.DownloadFileAsync(uri3, filename2);
+                       wc.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
+                    label1.Text = "Файл скачан";
                 }
                 else
                 {
+                  
                     WebClient wc = new WebClient();
                     wc.DownloadFileAsync(uri3, filename2);
                     wc.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
+                    label1.Text = "Файл скачан2";
                 }
             }
             catch (Exception ex)
@@ -126,6 +141,7 @@ namespace launcher_informer
                 Log.writeLogLine(ex.Message + " unzip");
             }
         }
+        
         public void Completed(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Error != null)
@@ -144,6 +160,7 @@ namespace launcher_informer
                 unzip();
             }
         }
+        
         public void copy()
         {
             try
