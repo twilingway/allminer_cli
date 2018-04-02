@@ -48,7 +48,7 @@ namespace Informer
             InitializeComponent();
             string fullPath = Application.StartupPath.ToString();
             _manager = new INIManager(fullPath + "\\my.ini");
-            _manager.WritePrivateString("main", "version", "1.3.8");
+            _manager.WritePrivateString("main", "version", "1.3.9");
             Process psiwer;
             psiwer = Process.Start("cmd", @"/c taskkill /f /im launcher_informer.exe");
             psiwer.Close();
@@ -1180,9 +1180,7 @@ namespace Informer
         }
         public void SendData()
         {
-            if (GlobalVars.InternetIsActive == true)
-            {
-                
+                            
                 try
                 {
                     if (!string.IsNullOrEmpty(GlobalVars.token))
@@ -1301,11 +1299,7 @@ namespace Informer
                     _error.writeLogLine(ex.Message + "function send() Send to site " + GlobalVars.json_send, "error");
 
                 }
-
-            }
-            else {
-                _log.writeLogLine("Internet is Off ", "log");
-            }
+                                   
         }
 
         
@@ -1861,7 +1855,7 @@ namespace Informer
                 using (Ping ping = new System.Net.NetworkInformation.Ping())
                 {
                     PingReply pingReply = null;
-                    int timeout = 250;
+                    int timeout = 1000;
                     pingReply = ping.Send("8.8.8.8", timeout);
 
                     if (pingReply.Status == IPStatus.Success)
