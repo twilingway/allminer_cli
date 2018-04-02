@@ -96,7 +96,7 @@ static class GlobalVars
     public static bool IsRebootStarted = false;
     public static bool rebootDontHaveInternet = false;
     public static bool rebootLoadGPU = false;
-    public static bool InternetIsActive = true;
+    public static bool InternetIsActive = false;
     public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
 
     //public static bool nice;

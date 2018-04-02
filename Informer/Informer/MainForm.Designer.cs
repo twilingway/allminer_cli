@@ -368,7 +368,7 @@
             // PingInternetTimer
             // 
             this.PingInternetTimer.Enabled = true;
-            this.PingInternetTimer.Interval = 5000;
+            this.PingInternetTimer.Interval = 10000;
             this.PingInternetTimer.Tag = "internet";
             this.PingInternetTimer.Tick += new System.EventHandler(this.PingTimerTick);
             // 

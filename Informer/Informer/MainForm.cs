@@ -17,7 +17,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
-
+using System.Net.NetworkInformation;
 
 namespace Informer
 {
@@ -36,7 +36,7 @@ namespace Informer
 
         public MainForm()
         {
-
+          
             if (!String.IsNullOrEmpty(Properties.Settings.Default.Language))
             {
                 System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(Properties.Settings.Default.Language);
@@ -48,7 +48,7 @@ namespace Informer
             InitializeComponent();
             string fullPath = Application.StartupPath.ToString();
             _manager = new INIManager(fullPath + "\\my.ini");
-            _manager.WritePrivateString("main", "version", "1.3.7");
+            _manager.WritePrivateString("main", "version", "1.3.8");
             Process psiwer;
             psiwer = Process.Start("cmd", @"/c taskkill /f /im launcher_informer.exe");
             psiwer.Close();
@@ -64,20 +64,18 @@ namespace Informer
             _log = new LogFile("log");
             _error = new LogFile("error");
 
-
+            
+            СheckForPing();
             СheckForNewVersion();
             InitFromIni();
             
             f2 = new SettingsForm();
-           
-            
-         
-
-
+                  
         }
-        
-       private void BtStopClick(object sender, EventArgs e)
+       
+        private void BtStopClick(object sender, EventArgs e)
         {
+           
             GetTempretureTimer.Enabled = false;
             AutoStartTimer.Enabled = false;
             AutoStartTimer.Stop();
@@ -1156,6 +1154,7 @@ namespace Informer
                         DontHaveInternetTimer.Enabled = true;
                         labelStatusInternet.Text = MyStrings.labelStatusInternet;
                         label3CounterInternet.Text = GlobalVars.timer_inet.ToString();
+                        labelStatusInternet.ForeColor = Color.Red;
                     }
                     else
                     {
@@ -1181,126 +1180,132 @@ namespace Informer
         }
         public void SendData()
         {
-
-            try
+            if (GlobalVars.InternetIsActive == true)
             {
-                if (!string.IsNullOrEmpty(GlobalVars.token))
-                {
-
-                    GlobalVars.json_send = _http.GetContent(GlobalVars.host +
-                    "/api.php?token=" + GlobalVars.token +
-                    "&gpu=" + GlobalVars.card +
-                    "&temp=" + GlobalVars.temp +
-                    "&fan=" + GlobalVars.fan +
-                    "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
-                    "&v=" + GlobalVars.versions +
-                    "&load=" + GlobalVars.load +
-                    "&clock=" + GlobalVars.clock +
-                    "&mem=" + GlobalVars.mem
-                   // "&pool=" + GlobalVars.pool +
-                   // "&hash=" + "417"
-                   );
-                  //  _log.writeLogLine("Отправка на сайт С токеном и получение ответа " + GlobalVars.json_send, "log");
-
-                }
-                else if (string.IsNullOrEmpty(GlobalVars.token))
-                {
-                    GlobalVars.json_send = _http.GetContent(GlobalVars.host +
-                    "/api.php?email=" + GlobalVars.email +
-                    "&secret=" + GlobalVars.secret +
-                    "&worker=" + GlobalVars.name +
-                    "&gpu=" + GlobalVars.card +
-                    "&temp=" + GlobalVars.temp +
-                    "&fan=" + GlobalVars.fan +
-                    "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
-                    "&v=" + GlobalVars.versions +
-                    "&load=" + GlobalVars.load +
-                    "&clock=" + GlobalVars.clock +
-                    "&mem=" + GlobalVars.mem +
-                   // "&pool=" + GlobalVars.pool +
-                    "&hash=" + "417");
-                  //  _log.writeLogLine("Отправка на сайт БЕЗ токена и получение ответа " + GlobalVars.json_send, "log");
-
-                }
-                //GlobalVars.json_send = "{"token":"73b41e62c748693a46d5bd6603dc51a0","settings":{"interval":60},"message":"Use token endpoint"}";
-
-
-
-                if (!string.IsNullOrWhiteSpace(GlobalVars.json_send))
-                {
-
-
-                    //var interval = JsonConvert.DeserializeObject<ApiResponse>(File.ReadAllText("json.json"));
-                    var response = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
-                    int test = response.settings.interval;
-                    string test2 = test.ToString();
-                   // _log.writeLogLine("Интервал " + test2, "log");
-
-                    SendDataTimer.Interval = response.settings.interval * 1000;
-
-
-
-
-                    if (GlobalVars.token != response.token && !string.IsNullOrEmpty(response?.token))
-                    {
-
-                       // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
-                        //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
-                        GlobalVars.token = response.token;
-                        _manager.WritePrivateString("main", "token", GlobalVars.token);
-                        tbToken.Text = GlobalVars.token;
-
-                    }
-
-                    if (GlobalVars.name != response.settings.name && !string.IsNullOrEmpty(response.settings?.name))
-                    {
-
-                       // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
-                        //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
-                        GlobalVars.name = response.settings.name;
-                        _manager.WritePrivateString("main", "name", GlobalVars.name);
-                        tbRigName.Text = GlobalVars.name;
-
-                    }
-
-                    InformationLabel.Text = "Authorization OK";
-                    InformationLabel.ForeColor = Color.Green;
-                    /*
-                    if (GlobalVars.json_send == "Auth failed")
-                    {
-                        MessageBox.Show("Auth failed! неверный токен");
-                    }
-                    */
-                }
-                else {
-                    if (GlobalVars.InternetIsActive == true )
-                    {
-
-                        //MessageBox.Show("Auth failed! Possibly incorrect token!");
-                        // _error.writeLogLine(ex.Message, "error");
-                        // SendDataTimer.Interval = 300 * 1000;
-                        InformationLabel.Text = "Authorization failed";
-                        InformationLabel.ForeColor = Color.Red;
-
-                    }
-
-                }
-                    
-                  
-                    
-
                 
+                try
+                {
+                    if (!string.IsNullOrEmpty(GlobalVars.token))
+                    {
 
-                
+                        GlobalVars.json_send = _http.GetContent(GlobalVars.host +
+                        "/api.php?token=" + GlobalVars.token +
+                        "&gpu=" + GlobalVars.card +
+                        "&temp=" + GlobalVars.temp +
+                        "&fan=" + GlobalVars.fan +
+                        "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
+                        "&v=" + GlobalVars.versions +
+                        "&load=" + GlobalVars.load +
+                        "&clock=" + GlobalVars.clock +
+                        "&mem=" + GlobalVars.mem
+                       // "&pool=" + GlobalVars.pool +
+                       // "&hash=" + "417"
+                       );
+                        //  _log.writeLogLine("Отправка на сайт С токеном и получение ответа " + GlobalVars.json_send, "log");
+
+                    }
+                    else if (string.IsNullOrEmpty(GlobalVars.token))
+                    {
+                        GlobalVars.json_send = _http.GetContent(GlobalVars.host +
+                        "/api.php?email=" + GlobalVars.email +
+                        "&secret=" + GlobalVars.secret +
+                        "&worker=" + GlobalVars.name +
+                        "&gpu=" + GlobalVars.card +
+                        "&temp=" + GlobalVars.temp +
+                        "&fan=" + GlobalVars.fan +
+                        "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
+                        "&v=" + GlobalVars.versions +
+                        "&load=" + GlobalVars.load +
+                        "&clock=" + GlobalVars.clock +
+                        "&mem=" + GlobalVars.mem +
+                        // "&pool=" + GlobalVars.pool +
+                        "&hash=" + "417");
+                        //  _log.writeLogLine("Отправка на сайт БЕЗ токена и получение ответа " + GlobalVars.json_send, "log");
+
+                    }
+                    //GlobalVars.json_send = "{"token":"73b41e62c748693a46d5bd6603dc51a0","settings":{"interval":60},"message":"Use token endpoint"}";
+
+
+
+                    if (!string.IsNullOrWhiteSpace(GlobalVars.json_send))
+                    {
+
+
+                        //var interval = JsonConvert.DeserializeObject<ApiResponse>(File.ReadAllText("json.json"));
+                        var response = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
+                        int test = response.settings.interval;
+                        string test2 = test.ToString();
+                        // _log.writeLogLine("Интервал " + test2, "log");
+
+                        SendDataTimer.Interval = response.settings.interval * 1000;
+
+
+
+
+                        if (GlobalVars.token != response.token && !string.IsNullOrEmpty(response?.token))
+                        {
+
+                            // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
+                            //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
+                            GlobalVars.token = response.token;
+                            _manager.WritePrivateString("main", "token", GlobalVars.token);
+                            tbToken.Text = GlobalVars.token;
+
+                        }
+
+                        if (GlobalVars.name != response.settings.name && !string.IsNullOrEmpty(response.settings?.name))
+                        {
+
+                            // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
+                            //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
+                            GlobalVars.name = response.settings.name;
+                            _manager.WritePrivateString("main", "name", GlobalVars.name);
+                            tbRigName.Text = GlobalVars.name;
+
+                        }
+
+                        InformationLabel.Text = "Authorization OK";
+                        InformationLabel.ForeColor = Color.Green;
+                        /*
+                        if (GlobalVars.json_send == "Auth failed")
+                        {
+                            MessageBox.Show("Auth failed! неверный токен");
+                        }
+                        */
+                    }
+                    else
+                    {
+                        if (GlobalVars.InternetIsActive == true)
+                        {
+
+                            //MessageBox.Show("Auth failed! Possibly incorrect token!");
+                            // _error.writeLogLine(ex.Message, "error");
+                            // SendDataTimer.Interval = 300 * 1000;
+                            InformationLabel.Text = "Authorization failed";
+                            InformationLabel.ForeColor = Color.Red;
+
+                        }
+
+                    }
+
+
+
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    _error.writeLogLine(ex.Message + "function send() Send to site " + GlobalVars.json_send, "error");
+
+                }
+
             }
-            catch (Exception ex)
-            {
-               
-                _error.writeLogLine(ex.Message + "function send() Send to site " + GlobalVars.json_send, "error");
-
+            else {
+                _log.writeLogLine("Internet is Off ", "log");
             }
-
-
         }
 
         
@@ -1309,39 +1314,50 @@ namespace Informer
 
         public void СheckForNewVersion()
         {
-            try
+            if (GlobalVars.InternetIsActive == true)
             {
-                string v = _manager.GetPrivateString("main", "version");
-                string pack = _http.GetContent(GlobalVars.host + "/api/?method=version");
-                VersionResponse m = JsonConvert.DeserializeObject<VersionResponse>(pack);
-                string ver = m.version;
-                GlobalVars.link = m.link;
+                try
+                {
+                    string v = _manager.GetPrivateString("main", "version");
+                    string pack = _http.GetContent(GlobalVars.host + "/api/?method=version");
+                    VersionResponse m = JsonConvert.DeserializeObject<VersionResponse>(pack);
+                    string ver = m.version;
+                    GlobalVars.link = m.link;
 
-                if (v == ver)
-                {
-                    linkLabelUpdate.Visible = false;
+                    if (v == ver)
+                    {
+                        linkLabelUpdate.Visible = false;
+                    }
+                    else
+                    {
+                        linkLabelUpdate.Visible = true;
+                        linkLabelUpdate.Text = "Upgrade to v" + ver;
+                        try
+                        {
+
+                            Process.Start("launcher_informer.exe");
+                        }
+                        catch (Exception ex)
+                        {
+                            _error.writeLogLine(ex.Message, "error");
+                        }
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    linkLabelUpdate.Visible = true;
-                    linkLabelUpdate.Text = "Upgrade to v" + ver;
-                    try
-                    {
-                        
-                        Process.Start("launcher_informer.exe");
-                    }
-                    catch (Exception ex)
-                    {
-                        _error.writeLogLine(ex.Message, "error");
-                    }
+                    _error.writeLogLine(ex.Message, "error");
                 }
 
             }
-            catch (Exception ex)
-            {
-                _error.writeLogLine(ex.Message, "error");
+            else {
+                 linkLabelUpdate.Visible = false;
+                _log.writeLogLine("Internet is Off ", "log");
             }
+
         }
+
+
 
         private void CheckNewVersionTimerTick(object sender, EventArgs e)
         {
@@ -1350,8 +1366,7 @@ namespace Informer
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string l = GlobalVars.link;
-            System.Diagnostics.Process.Start(l);
+            СheckForNewVersion();
         }
 
         private void UptimeTimerTick(object sender, EventArgs e)
@@ -1391,7 +1406,7 @@ namespace Informer
 
                 _log.writeLogLine("Reboot rig " + GlobalVars.name + " " + msg, "log");
 
-                //  Process.Start(bat);
+                 Process.Start(bat);
             }
             catch (Exception ex)
             {
@@ -1780,7 +1795,9 @@ namespace Informer
 
         private void SendDataTimerTick(object sender, EventArgs e)
         {
-          SendData();
+
+            SendData();
+            
         }
 
         
@@ -1837,18 +1854,38 @@ namespace Informer
             GlobalVars.timer_memory = GlobalVars.timer_memory - 1;
         }
 
-        private void PingTimerTick(object sender, EventArgs e)
+        public void СheckForPing()
         {
             try
             {
-                using (var ping = new System.Net.NetworkInformation.Ping())
+                using (Ping ping = new System.Net.NetworkInformation.Ping())
                 {
-                    ping.Send("8.8.8.8");
+                    PingReply pingReply = null;
+                    int timeout = 250;
+                    pingReply = ping.Send("8.8.8.8", timeout);
+
+                    if (pingReply.Status == IPStatus.Success)
+                    {
+                        GlobalVars.InternetIsActive = true;
+                        labelStatusInternetPing.Text = "OK";
+                        labelStatusInternetPing.ForeColor = Color.Green;
+
+
+                    }
+                    else
+                    {
+                        _log.writeLogLine(" INTERNET OFF", "log");
+                        labelStatusInternetPing.Text = "No access to the Internet";
+                        labelStatusInternetPing.ForeColor = Color.Red;
+                        GlobalVars.InternetIsActive = false;
+
+                    }
+
+
                 }
-                GlobalVars.InternetIsActive = true;
-                labelStatusInternetPing.Text = "OK";
-                labelStatusInternetPing.ForeColor = Color.Green;
+
             }
+
             catch (Exception ex)
             {
 
@@ -1857,6 +1894,53 @@ namespace Informer
                 labelStatusInternetPing.ForeColor = Color.Red;
                 GlobalVars.InternetIsActive = false;
             }
+
+        }
+
+            private void PingTimerTick(object sender, EventArgs e)
+        {
+            СheckForPing();
+            /*
+            try 
+            {
+                using (Ping ping = new System.Net.NetworkInformation.Ping())
+                {
+                    PingReply pingReply = null;
+                    int timeout = 120;
+                    pingReply = ping.Send("8.8.8.8",timeout);
+
+                    if (pingReply.Status == IPStatus.Success)
+                    {
+                        GlobalVars.InternetIsActive = true;
+                        labelStatusInternetPing.Text = "OK";
+                        labelStatusInternetPing.ForeColor = Color.Green;
+
+                       
+                    }
+                else 
+                    {
+                    _log.writeLogLine(" INTERNET OFF", "log");
+                    labelStatusInternetPing.Text = "No access to the Internet";
+                    labelStatusInternetPing.ForeColor = Color.Red;
+                    GlobalVars.InternetIsActive = false;
+                    
+                    }
+
+
+                }
+               
+            }
+        
+            catch (Exception ex)
+            {
+
+                _error.writeLogLine(ex.Message + " INTERNET OFF", "error");
+                labelStatusInternetPing.Text = "No access to the Internet";
+                labelStatusInternetPing.ForeColor = Color.Red;
+                GlobalVars.InternetIsActive = false;
+            }
+            */
+            
 }
 
         private void InternetInactiveTimerTick(object sender, EventArgs e)

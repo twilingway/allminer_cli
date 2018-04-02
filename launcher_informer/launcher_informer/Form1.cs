@@ -71,6 +71,7 @@ namespace launcher_informer
             {
                 LogFile Log = new LogFile("error_launcher");
                 Log.writeLogLine(ex.Message + " fun update");
+
             }
         }
 
