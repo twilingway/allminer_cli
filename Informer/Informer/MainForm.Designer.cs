@@ -473,9 +473,9 @@
             // 
             // cbLocalize
             // 
-            resources.ApplyResources(this.cbLocalize, "cbLocalize");
             this.cbLocalize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbLocalize.FormattingEnabled = true;
+            resources.ApplyResources(this.cbLocalize, "cbLocalize");
             this.cbLocalize.Name = "cbLocalize";
             // 
             // notifyIcon1

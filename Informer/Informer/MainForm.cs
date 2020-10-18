@@ -733,7 +733,8 @@ namespace Informer
                                 else if (sensor.SensorType == SensorType.Temperature)//Температура
                                 {
 
-
+                                   if (sensor.Name == "GPU Core")//ЯДРО
+                                     {
                                     GlobalVars.temp += sensor.Value.GetValueOrDefault() + ",";
                                     temp1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                                     if (tempmin > temp1)
@@ -744,6 +745,7 @@ namespace Informer
                                     {
                                         tempmax = temp1;
                                     }
+                                   }
                                 }
                                 else if (sensor.SensorType == SensorType.Control)// FAN
                                 {
@@ -1226,11 +1228,9 @@ namespace Informer
 
 
                     if (!string.IsNullOrWhiteSpace(GlobalVars.json_send))
-                    {
-
-
-                        //var interval = JsonConvert.DeserializeObject<ApiResponse>(File.ReadAllText("json.json"));
-                        var response = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
+                    {                   
+                    //var interval = JsonConvert.DeserializeObject<ApiResponse>(File.ReadAllText("json.json"));
+                    var response = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
                         int test = response.settings.interval;
                         string test2 = test.ToString();
                         // _log.writeLogLine("Интервал " + test2, "log");

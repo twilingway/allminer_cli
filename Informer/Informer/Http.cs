@@ -82,6 +82,8 @@ namespace Informer
                 throw new ArgumentException("URL can't be empty", nameof(url));
 
             try {
+                //LogFile Log = new LogFile("url");
+                //Log.writeLogLine("SENT STRING: " + url , "url");
                 return _httpClient.GetStringAsync(url).ConfigureAwait(false).GetAwaiter().GetResult();
             }
             catch (Exception ex)
